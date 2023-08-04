@@ -21,9 +21,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@Components/*": ["Components/*"], // Remove the leading "./src/" from paths
-      "@Pages/*": ["Pages/*"],
-      "@Utils/*": ["Utils/*"]
+      "Components/*": ["Components/*"], // Remove the leading "./src/" from paths
+      "Pages/*": ["Pages/*"],
+      "Utils/*": ["Utils/*"],
+      "Types/*": ["Utils/Types/*"]
     } 
   },
   "include": [
