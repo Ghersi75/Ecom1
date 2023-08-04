@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src", // Add the baseUrl here to point to the root of your source directory
     "target": "es5",
     "lib": [
       "dom",
@@ -18,7 +19,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@Components/*": ["Components/*"], // Remove the leading "./src/" from paths
+      "@Pages/*": ["Pages/*"],
+      "@Utils/*": ["Utils/*"]
+    } 
   },
   "include": [
     "src"
