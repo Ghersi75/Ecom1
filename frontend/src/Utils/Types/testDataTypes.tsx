@@ -3,7 +3,7 @@ type testDataType = {
   "items": {
     "name": string,
     "description": string,
-    "price": string | {
+    "price": {
       "sm"?: string,
       "md"?: string,
       "xl"?: string
