@@ -1,6 +1,8 @@
 import { testDataType } from "Types/testDataTypes"
 
-export type MenuSectionPropsType = {
+type MenuSectionPropsType = {
   "sectionTitle": string,
   "data": testDataType
 }
+
+export type { MenuSectionPropsType };

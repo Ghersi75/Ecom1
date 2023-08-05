@@ -1,5 +1,3 @@
-
-
 function Navbar() {
   return (
     <div className="fixed h-16 w-screen bg-green-500">

@@ -1,4 +1,4 @@
-export type testDataType = {
+type testDataType = {
   "section": string,
   "items": {
     "name": string,
@@ -11,3 +11,5 @@ export type testDataType = {
     "img"?: string
   }[]
 }
+
+export type { testDataType };
