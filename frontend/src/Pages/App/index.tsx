@@ -5,7 +5,7 @@ import MenuSection from "Components/MenuSection"
 
 function App() {
   return (
-    <div className="h-[300vh]">
+    <div className="">
       <Navbar />
       <div className="h-16" />
       <MenuSection />
