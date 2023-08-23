@@ -24,7 +24,8 @@
       "Components/*": ["Components/*"], // Remove the leading "./src/" from paths
       "Pages/*": ["Pages/*"],
       "Utils/*": ["Utils/*"],
-      "Types/*": ["Utils/Types/*"]
+      "Types/*": ["Utils/Types/*"],
+      "lib/*": ["lib/*"]
     } 
   },
   "include": [
