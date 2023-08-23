@@ -2,7 +2,7 @@ import { testDataType } from "Utils/Types/testDataTypes";
 
 export const testData: testDataType[] = [
   {
-    "section": "Popular",
+    "section_id": "Popular",
     "items": [
       {
         "name": "Italia Special",
@@ -67,7 +67,7 @@ export const testData: testDataType[] = [
     ]
   },
   {
-    "section": "Pizzas",
+    "section_id": "Pizzas",
     "items": [
       {
         "name": "Italia Special",
@@ -82,7 +82,7 @@ export const testData: testDataType[] = [
     ]
   },
   {
-    "section": "Salads",
+    "section_id": "Salads",
     "items": [
       {
         "name": "Italia Special",
