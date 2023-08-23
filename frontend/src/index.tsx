@@ -2,14 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './Pages/App';
+import AddItemMenu from "Components/AddItemMenu"
 import reportWebVitals from './reportWebVitals';
+import { addMenuItemActive, addMenuItemInformation } from "lib/atom"
+import { useAtom } from "jotai"
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <App />
+    <AddItemMenu />
   </React.StrictMode>
 );
 
