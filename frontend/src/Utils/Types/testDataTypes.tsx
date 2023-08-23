@@ -1,5 +1,5 @@
 type testDataType = {
-  "section": string,
+  "section_id": string,
   "items": {
     "name": string,
     "description": string,
