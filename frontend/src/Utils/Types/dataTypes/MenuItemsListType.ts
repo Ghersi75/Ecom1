@@ -2,7 +2,7 @@ import { GenericDataType } from "./GenericDataType"
 
 type MenuItemsListType = {
   "section_id": string,
-  "section_position": number,
+  "sorting_key": number,
   "items": GenericDataType[]
 }
 
