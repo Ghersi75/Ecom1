@@ -26,7 +26,8 @@ type GenericDataType = {
     "exclude": string[],
     // This needs to change to accommodate custom modifier types
     "custom": string[]
-  }
+  },
+  "sorting_key": string
 }
 
 export type { GenericDataType };
