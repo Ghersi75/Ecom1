@@ -1,11 +1,15 @@
 import { MouseEvent } from "react"
 import { testDataType } from "Utils/Types/testDataTypes";
 import { useAtom } from "jotai"
-import { addMenuItemActive, addMenuItemInformation } from "lib/atom"
+import { addMenuItemActive, addMenuItemInformation, dataAtom } from "lib/atom"
+import { MenuItemsListType } from "Utils/Types/dataTypes/MenuItemsListType";
 
-function SectionItems(props: testDataType) {
+// Change props type
+function SectionItems(props: {"item": MenuItemsListType}) {
   const [a, setActive] = useAtom(addMenuItemActive)
   const [b, setMenuItems] = useAtom(addMenuItemInformation)
+  const [data, _] = useAtom(dataAtom)
+
   const onClick = (event: MouseEvent, item: any) => {
     console.log(event.currentTarget)
     console.log(item)
@@ -16,16 +20,16 @@ function SectionItems(props: testDataType) {
   return(
     <div className="p-4">
       <div className="pl-4 text-xl font-medium">
-        {props.section_id}
+        {props.item.section_id}
       </div>
       <div className="grid lg:grid-cols-2 grid-cols-1">
-        {props.items && 
-          props.items.map((item, index) => {
+        {props.item.item_ids && 
+          props.item.item_ids.map((item, index) => {
           return(
             <div className="bg-red-500 m-4 rounded-lg flex flex-row justify-between items-center outline outline-4 outline-black hover:outline-rose-500 hover:cursor-pointer" onClick={(e) => onClick(e, item)} key={index}>
               <div className="flex flex-col">
                 <h1 className="ml-4">
-                  {item.name}
+                  {data?.menuItems}
                   {/* {index} */}
                 </h1>
                 <h1 className="ml-4">
