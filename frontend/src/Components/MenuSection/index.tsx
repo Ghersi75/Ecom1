@@ -16,15 +16,11 @@ function MenuSection(props: any) {
   console.log(data)
   return (
     <div className="grid grid-cols-1 h-auto gap-9 bg-green-300 col-start-1 col-end-4">
-      {/* {
-        data.map((item: any, index: number) => {
-          return <p> {item.section_id} </p>
-        })
-      } */}
       {
-        data[0] && 
-        data.map((item: any, index: any) => {
-          return <SectionItems {...item} key={index} />
+        data &&
+        data.sections && 
+        data.sections.map((item: any, index: any) => {
+          return <SectionItems item={item} key={index} />
         })
       }
     </div>
