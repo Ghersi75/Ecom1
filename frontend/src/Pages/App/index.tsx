@@ -25,8 +25,9 @@ function App() {
       const resData = await response.json();
       setData(resData)
       console.log(data)
-      // console.log(`Res data`)
-      // console.log(resData)
+
+      // Add section sorting at some point once more sections are added
+
     } catch (error) {
       if (error instanceof Error) {
           console.error("There was a problem with the fetch operation:  ", error.message);
