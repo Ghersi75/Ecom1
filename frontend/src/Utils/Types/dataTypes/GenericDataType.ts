@@ -1,6 +1,6 @@
 type GenericDataType = {
   // Unique id for each item
-  "id": string,
+  "item_id": string,
   // Name of item
   "name": string,
   // Description of item
