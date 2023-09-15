@@ -12,14 +12,15 @@ function MenuSection(props: any) {
   useEffect(() => {
     // console.log(data);
   }, [data]);
-  
-  console.log(data)
+
+
   return (
     <div className="grid grid-cols-1 h-auto gap-9 bg-green-300 col-start-1 col-end-4">
       {
         data &&
-        data.sections && 
+        data.sections &&
         data.sections.map((item: any, index: any) => {
+          // return <> </>
           return <SectionItems item={item} key={index} />
         })
       }

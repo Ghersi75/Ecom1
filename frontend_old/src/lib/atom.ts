@@ -12,5 +12,6 @@ type dataAtomType = {
 const dataAtom = atom<dataAtomType | undefined>(undefined)
 const addMenuItemActive = atom<boolean>(false)
 const addMenuItemInformation = atom<any>({})
+const cartItems = atom<any>([])
 
 export { dataAtom, addMenuItemActive, addMenuItemInformation }
