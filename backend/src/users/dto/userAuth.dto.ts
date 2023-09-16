@@ -7,8 +7,12 @@ import { IsPasswordRequiredBasedOnProvider } from "./userAuthValidators"
 // Email and provider are always required, and password only required when provider == "credentials"
 export class UserCredentialsAuthDto {
   @IsEmail()
-  @IsNotEmpty()
-  email: string;
+  @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  username?: string;
 
   @IsString()
   @IsNotEmpty()
