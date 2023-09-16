@@ -21,13 +21,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Only important fields for signing up are
+// Username
+// Email
+// Password, though optional if other providers are used
 model User {
   user_id Int @id @default(autoincrement())
-  first_name String 
-  last_name String
+  username String @unique 
+  first_name String?
+  last_name String?
   profile_picture String?
   email String @unique
-  phone_number String
+  phone_number String?
   password_hash String?
   provider String?
   registered_at DateTime @default(now())
