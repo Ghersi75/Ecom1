@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { UserCredentialsAuthDto, UserProviderAuthDto } from './dto/userAuth.dto';
+import { hash, compare } from "bcrypt"
 
 @Injectable()
 export class UsersService {
@@ -10,16 +11,62 @@ export class UsersService {
 
   async signinCredentials(dto: UserCredentialsAuthDto) {
     if (dto.provider !== "credentials") {
+      return new BadRequestException("Wrong provider given")
+    }
+
+    if (!dto.email && !dto.username) {
+      return new BadRequestException("No username or email given")
+    }
+    
+    if (dto.email) {
       const user = await this.database.connection.selectFrom("users").selectAll().where("email", "=", dto.email).executeTakeFirst()
     
       // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
       if (!user) {
+        return new BadRequestException({
+          error: "No user with given email found"
+        })
+      }
 
-        // return new BadRequestException("No user with given email found")
+      
+      if (compare(dto.password, user.password_hash)) {
+        return JSON.stringify({
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+          image: user.profile_picture
+        })
       }
   
-      return JSON.stringify(user)
+      return new UnauthorizedException({
+        error: "Passwords do not match"
+      })
     }
+
+    if (dto.username) {
+      const user = await this.database.connection.selectFrom("users").selectAll().where("username", "=", dto.username).executeTakeFirst()
+    
+      // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
+      if (!user) {
+        return new BadRequestException({
+          error: "No user with given username found"
+        })
+      }
+
+      if (compare(dto.password, user.password_hash)) {
+        return JSON.stringify({
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+          image: user.profile_picture
+        })
+      }
+  
+      return new UnauthorizedException({
+        error: "Passwords do not match"
+      })
+    }
+      
     
   }
 
