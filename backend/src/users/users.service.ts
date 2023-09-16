@@ -9,17 +9,15 @@ export class UsersService {
   }
 
   async signinCredentials(dto: UserCredentialsAuthDto) {
-    if (dto.provider !== "credentials") {
-      const user = await this.database.connection.selectFrom("users").selectAll().where("email", "=", dto.email).executeTakeFirst()
-    
-      // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
-      if (!user) {
-
-        // return new BadRequestException("No user with given email found")
-      }
+    const user = await this.database.connection.selectFrom("users").selectAll().where("email", "=", dto.email).executeTakeFirst()
   
-      return JSON.stringify(user)
+    // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
+    if (!user) {
+
+      return new BadRequestException("No user with given email found")
     }
+
+    return JSON.stringify(user)
     
   }
 
