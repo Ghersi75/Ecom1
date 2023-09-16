@@ -17,6 +17,21 @@ generator kysely {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id Int @id @default(autoincrement())
+  first_name String 
+  last_name String
+  profile_picture String?
+  email String @unique
+  phone_number String
+  password_hash String?
+  provider String?
+  registered_at DateTime @default(now())
+  last_login DateTime @default(now())
+
+  @@map("users")
 }
