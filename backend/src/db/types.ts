@@ -6,17 +6,17 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type User = {
   user_id: Generated<number>;
-  first_name: string;
-  last_name: string;
+  username: string;
+  first_name: string | null;
+  last_name: string | null;
   profile_picture: string | null;
   email: string;
-  phone_number: string;
+  phone_number: string | null;
   password_hash: string | null;
   provider: string | null;
   registered_at: Generated<Timestamp>;
   last_login: Generated<Timestamp>;
 };
-
 export type DB = {
   users: User;
 };
