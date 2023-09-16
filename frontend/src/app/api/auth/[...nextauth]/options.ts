@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
-import GithubProvider from "next-auth/providers/github"
+import FacebookProvider from "next-auth/providers/facebook"
 
 export const options: NextAuthOptions = {
   providers: [
@@ -74,24 +74,34 @@ export const options: NextAuthOptions = {
       clientId: (process.env.GOOGLE_ID as string),
       clientSecret: (process.env.GOOGLE_SECRET as string),
       profile(profile, tokens) {
+        console.log(profile)
         const username = profile.name
         const email = profile.email
         // Add a field for provider or login location in the database
         const password = "google"
 
-        
-
         return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-        };
+          id: profile.sub
+        }
+
+        // return {
+        //   id: profile.sub,
+        //   name: profile.name,
+        //   email: profile.email,
+        //   image: profile.picture,
+        // };
       },
     }),
-    GithubProvider({
-      clientId: (process.env.GITHUB_ID as string),
-      clientSecret: (process.env.GITHUB_SECRET as string)
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID as string,
+      clientSecret: process.env.FACEBOOK_SECRET as string,
+      profile(profile, tokens) {
+        console.log(profile)
+
+        return {
+          id: profile.id
+        }
+      }
     })
   ],
   pages: {
