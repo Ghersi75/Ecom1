@@ -34,7 +34,7 @@ model User {
   email String @unique
   phone_number String?
   password_hash String?
-  provider String?
+  provider String
   registered_at DateTime @default(now())
   last_login DateTime @default(now())
 
