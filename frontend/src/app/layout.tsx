@@ -1,10 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar/Navbar'
 import AuthProvider from '@/context/AuthProvider'
+import Body from '@/components/ClientSideBody'
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Pizzeria Website',
@@ -18,12 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`dark ${inter.className}`}>
+      <Body>
         <AuthProvider>  
           <Navbar />
           {children}
         </AuthProvider>
-      </body>
+      </Body>
     </html>
   )
 }
