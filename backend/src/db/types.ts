@@ -13,7 +13,7 @@ export type User = {
   email: string;
   phone_number: string | null;
   password_hash: string | null;
-  provider: string | null;
+  provider: string;
   registered_at: Generated<Timestamp>;
   last_login: Generated<Timestamp>;
 };
