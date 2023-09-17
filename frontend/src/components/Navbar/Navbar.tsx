@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import LogoutButton from './LogoutButton'
+import LightDarkButton from './LightDarkModeButton'
 
 export default function() {
   return(
@@ -22,6 +23,7 @@ export default function() {
         </Button>
       </Link>
       <LogoutButton />
+      <LightDarkButton />
     </div>
   )
 }
