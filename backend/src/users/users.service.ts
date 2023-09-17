@@ -71,6 +71,45 @@ export class UsersService {
   }
 
   async signupCredentials(dto: UserCredentialsAuthDto) {
+    if (dto.provider !== "credentials") {
+      return new BadRequestException("Wrong provider given")
+    }
+
+    if (!dto.password || !dto.email || !dto.username) {
+      return new BadRequestException({
+        error: "Username, Email, or Password missing."
+      })
+    }
+
+    const hashedPass = await hash(dto.password, 12)
+    try {
+      const user = await this.database.connection.insertInto("users").values({
+        username: dto.username,
+        email: dto.email,
+        password_hash: hashedPass,
+        provider: dto.provider
+      }).executeTakeFirst()
+
+      console.log(user)
+      return JSON.stringify({
+        id: Number(user.insertId),
+        username: dto.username,
+        email: dto.email,
+        image: null
+      })
+    } catch (e) {
+      console.log(e)
+      if (e.code === "ER_DUP_ENTRY") {
+        return new BadRequestException({
+          error: "Username or Email already in use"
+        })
+      }
+
+      return new BadRequestException({
+        error: "Creating user failed",
+        detailed_error: e
+      })
+    }
     
   }
 }
