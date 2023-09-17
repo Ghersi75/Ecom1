@@ -11,7 +11,7 @@ export class UsersController {
     return this.usersService.signinCredentials(dto)
   }
 
-  @Post("/signup")
+  @Post("/signup/credentials")
   async signupCredentials(@Body() dto: UserCredentialsAuthDto) {
     return this.usersService.signupCredentials(dto)
   }
