@@ -47,7 +47,7 @@ export type User = {
 };
 export type DB = {
   menu_items: MenuItems;
-  SectionItems: SectionItems;
+  section_items: SectionItems;
   sections: Section;
   users: User;
 };

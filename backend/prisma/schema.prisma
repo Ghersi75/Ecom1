@@ -97,4 +97,6 @@ model SectionItems {
   section Section @relation(fields: [section_id], references: [section_id]) 
   section_id Int
   items MenuItems[] 
+
+  @@map("section_items")
 }
