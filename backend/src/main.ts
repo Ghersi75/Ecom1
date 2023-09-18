@@ -11,6 +11,13 @@ async function bootstrap() {
     whitelist: true
   }))
 
+  app.enableCors({
+    origin: 'http://localhost:3000', // Allow only this origin. Wildcards '*' can't be used in conjunction with credentials
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type',
+    credentials: true,
+  });
+
   await app.listen(3333);
 }
 bootstrap();
