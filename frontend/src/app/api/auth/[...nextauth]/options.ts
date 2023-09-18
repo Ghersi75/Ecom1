@@ -7,15 +7,16 @@ export const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'username or email',
+      // name: 'username or email',
+      
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        email: { type: "text" },
-        username: { label: "Username", type: "text", placeholder: "Username" },
-        password: { label: "Password", type: "password", placeholder: "Password" },
+        email: { },
+        username: { },
+        password: { },
       },
       async authorize(credentials, req) {
         // You need to provide your own logic here that takes the credentials
@@ -25,32 +26,38 @@ export const options: NextAuthOptions = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
 
-        // Fix this later
-        // const user = { id: "42", name: "test", password: "test"}
-
         if ((credentials?.username || credentials?.email) && credentials?.password) {
           try {
-            const res = await fetch("http://localhost:3000/api/users/login", {
-              method: 'POST',
+            console.log(credentials)
+            const res = await fetch("http://localhost:3333/users/signin/credentials", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
+                provider: "credentials",
                 email: credentials?.email,
                 username: credentials?.username,
-                password: credentials?.password
-              }),
-              headers: { "Content-Type": "application/json" }
-            })
+                password: credentials.password
+              })
+            });
+
+
+            if (res.ok) {
+              const user = await res.json();
+              console.log("user: ", user);
+              return {
+                id: user.id,
+                name: user.username,
+                email: user.email,
+                image: user.image
+              }
+            } else {
+              console.error("Request failed:", res.status, res.statusText);
+              return null
+            }
 
             // console.log(res)
-  
-            const user = await res.json()
-
-            console.log(user)
-
-            return {
-              id: user.user_id,
-              name: user.username,
-              email: user.email
-            }
           }
           catch (e) {
             console.log("Error logging in with next-auth credentials: ", e)
