@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
-import Image from "next/image"
-import { signIn } from "next-auth/react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import { useEffect } from "react"
 
 const formSchema = z.object({
   email: z
@@ -26,7 +27,7 @@ const formSchema = z.object({
   username: z
     .string()
     .min(1, { message: "Username is required" })
-    .min(8, { message: "Username must be at least 8 characters long" })
+    .min(6, { message: "Username must be at least 6 characters long" })
     .max(32, { message: "Username cannot be longer than 32 characters"}),
   password: z
     .string()
@@ -38,7 +39,7 @@ const formSchema = z.object({
     .regex(/(?=.*[!#$%^&*])/, { message: "Password must include at least 1 of the following special characters !#$%^&*"}),
   confirmPassword: z
     .string()
-    .min(1, { message: "Password is requied" })
+    .min(1, { message: "Password is required" })
 })
   .refine((data) => data.password === data.confirmPassword , {
     path: ["confirmPassword"],
@@ -46,6 +47,16 @@ const formSchema = z.object({
   })
 
 export default function SignUp() {
+  const { data: session } = useSession();
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session) {
+      router.push('/');  // Redirect to homepage if user is logged in
+    }
+  }, [session]);
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,10 +65,32 @@ export default function SignUp() {
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+    const res = await fetch("http://localhost:3333/users/signup/credentials", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        provider: "credentials",
+        username: values.username,
+        email: values.email,
+        password: values.password
+      })
+    });
+
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log(data);
+    } else {
+      console.error("Request failed:", res.status, res.statusText);
+    }
+
+    // console.log(res)
   }
 
   return (
@@ -100,7 +133,21 @@ export default function SignUp() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="Password" {...field} />
+                  <Input type="password" placeholder="Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Confirm Password */}
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Confirm Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

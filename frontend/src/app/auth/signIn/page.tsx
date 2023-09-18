@@ -21,11 +21,22 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+const emailSchema = z.string().email();
+
+const validateEmail = (input: string) => {
+  try {
+    emailSchema.parse(input);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 const formSchema = z.object({
   username: z
     .string()
     .min(1, { message: "Username or Email is required" })
-    .min(8, { message: "Username or Email must be at least 8 characters long" })
+    .min(6, { message: "Username or Email must be at least 6 characters long" })
     // https://www.atdata.com/blog/long-email-addresses#:~:text=So%20over%20the%20last%20few,show%20at%20least%2031%20characters.
     // A very small percentage of people have email addresses longer than 50 chars, but went up to 75 just to be safe
     .max(75, { message: "Username or Email cannot be longer than 75 characters"}),
@@ -42,7 +53,7 @@ const formSchema = z.object({
 export default function SignIn() {
   const { data: session } = useSession();
   const router = useRouter();
-
+  
   useEffect(() => {
     if (session) {
       router.push('/');  // Redirect to homepage if user is logged in
@@ -66,26 +77,44 @@ export default function SignIn() {
       password
     } = values
 
-    const emailSchema = z.string().email();
-
-    const validateEmail = (input: string) => {
-      try {
-        emailSchema.parse(input);
-        return true;
-      } catch (error) {
-        return false;
-      }
-    };
-
-    const payload = {
-      
+    const payload: {
+      provider: "credentials",
+      username?: string,
+      email?: string,
+      password: string
+    } = {
+      provider: "credentials",
+      password: values.password
     }
+
+    let res
 
     if (validateEmail(username)) {
       console.log("Email")
+      res = await signIn("credentials", {
+        email: values.username,
+        password: values.password
+      })
+      payload.email = values.username
     } else {
-      console.log("Password")
+      console.log("Username")
+      res = await signIn("credentials", {
+        username: values.username,
+        password: values.password
+      })
     }
+
+    console.log(res)
+
+
+    // if (res?.ok) {
+    //   const data = await res.json();
+    //   console.log(data);
+    // } else {
+    //   console.error("Request failed:", res.status, res.statusText);
+    // }
+
+    // console.log(res)
   }
 
   return (
