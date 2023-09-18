@@ -15,7 +15,6 @@ export type MenuItems = {
   is_active: Generated<number>;
   is_available: Generated<number>;
   is_featured: Generated<number>;
-  section_id: number;
 };
 export type Section = {
   section_id: Generated<number>;
@@ -31,6 +30,7 @@ export type SectionItems = {
   is_active: Generated<number>;
   is_available: Generated<number>;
   section_id: number;
+  item_id: number;
 };
 export type User = {
   user_id: Generated<number>;

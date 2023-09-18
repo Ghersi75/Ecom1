@@ -81,8 +81,7 @@ model MenuItems {
   // May be used for popular items or anything the restaurant may need
   is_featured Boolean @default(false)
 
-  section SectionItems @relation(fields: [section_id], references: [combo_id])
-  section_id Int
+  section_items SectionItems[]
 
   @@map("menu_items")
 }
@@ -96,7 +95,8 @@ model SectionItems {
 
   section Section @relation(fields: [section_id], references: [section_id]) 
   section_id Int
-  items MenuItems[] 
+  menu_item MenuItems @relation(fields: [item_id], references: [item_id])
+  item_id Int
 
   @@map("section_items")
 }
