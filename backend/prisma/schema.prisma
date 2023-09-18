@@ -40,3 +40,61 @@ model User {
 
   @@map("users")
 }
+
+model Section {
+  section_id Int @id @default(autoincrement())
+  // Name for organizing/internal use. 
+  // For example, one section may be named october_specials_limited_2022 while display name may simply be `October Specials`
+  // Customers may not need to know what kind of specials are going on, but rather that there are specials
+  // Also, restaurant may archive certain sections using the `is_active` field, so name may be useful for these purposes
+  name String @db.VarChar(100)
+  // Display name 
+  display_name String @db.VarChar(100)
+  // Key used to order the sections
+  display_order Int @default(0)
+  // If a new item is added, or accidentally added, and nothing is selected for active or available, it's better to not show it at first
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  section_items SectionItems[]
+
+  @@map("sections")
+}
+
+model MenuItems {
+  item_id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  display_name String @db.VarChar(100)
+  description String? @db.VarChar(500)
+  image_link String? @db.VarChar(2048)
+  // If base price is null, then price is dependent on size of item
+  // For example, a small pizza's price may be different from a medium pizza, and any 2 medium pizzas may have different price differences and base prices based on sizes
+  // Sm Cheese = $10.99, Md Cheese = $13.99
+  // Sm Special = $11.99, Md Special = $14.49
+  // The prices don't have the same base price, and price doesn't increase consistently based on size, so it's better to have a separate table for pricing based on sizes
+  base_price Decimal? @db.Decimal(10, 2) 
+  // This will not be used in the sections at the moment, but may be useful in the future, or for featured items section
+  display_order Int @default(0)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+  // This may be used to easily put items into the featured section
+  // May be used for popular items or anything the restaurant may need
+  is_featured Boolean @default(false)
+
+  section SectionItems @relation(fields: [section_id], references: [combo_id])
+  section_id Int
+
+  @@map("menu_items")
+}
+
+model SectionItems {
+  combo_id Int @id @default(autoincrement())
+
+  display_order Int @default(0)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  section Section @relation(fields: [section_id], references: [section_id]) 
+  section_id Int
+  items MenuItems[] 
+}
