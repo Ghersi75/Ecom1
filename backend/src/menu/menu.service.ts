@@ -97,6 +97,7 @@ export class MenuService {
       section["items"] = []
       menu_items.forEach((item) => {
         if (item.section_id == section.section_id) {
+          delete item.section_id
           section["items"].push(item)
         } 
       })
