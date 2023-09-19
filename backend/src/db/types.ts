@@ -25,7 +25,7 @@ export type ItemOptionPrices = {
 export type MenuItems = {
   item_id: Generated<number>;
   name: string;
-  display_name: string;
+  display_text: string;
   description: string | null;
   image_link: string | null;
   base_price: string | null;
@@ -38,17 +38,17 @@ export type ModifierOptions = {
   option_id: Generated<number>;
   modifier_id: number;
   name: string;
-  displa_test: string;
+  display_text: string;
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
-  base_price: string;
+  base_price: string | null;
   selection_option_id: number | null;
 };
 export type Modifiers = {
   modifier_id: Generated<number>;
   name: Generated<string>;
-  display_test: Generated<string>;
+  display_text: Generated<string>;
   description: string | null;
   is_required: Generated<number>;
   max_selection: number | null;
@@ -61,7 +61,7 @@ export type Modifiers = {
 export type Section = {
   section_id: Generated<number>;
   name: string;
-  display_name: string;
+  display_text: string;
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
