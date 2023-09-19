@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import ViewItem from "@/components/ViewItem/ViewItem";
+import { MenuSectionsType } from "@/lib/types/databaseReturnTypes";
 
 import Image from "next/image"
 import Link from "next/link"
@@ -55,28 +56,9 @@ export default async function Home({
     })
   }
 
-  console.log(productId)
+  // console.log(productId)
 
-  const sections: {
-    section_id: number,
-    name: string,
-    display_name: string,
-    display_order: number,
-    is_active: boolean,
-    is_available: boolean,
-    items: {
-      item_id: Generated<number>,
-      name: string,
-      display_name: string,
-      description: string | null,
-      image_link: string | null,
-      base_price: string | null,
-      display_order: Generated<number>,
-      is_active: Generated<number>,
-      is_available: Generated<number>,
-      is_featured: Generated<number>,
-  }[] | undefined
-  }[] | undefined = await getSections()
+  const sections: MenuSectionsType[] | undefined = await getSections()
 
   console.log(sections)
 
@@ -84,7 +66,7 @@ export default async function Home({
     <main className="mt-16">
       {
         productId ? 
-        <ViewItem productId={productId as string}/>
+        <ViewItem item_id={typeof productId === "string" ? productId : ""}/>
         :
         null
       }
@@ -95,17 +77,17 @@ export default async function Home({
           {sections.map((section, index) => {
             return (
               <div key={index}>
-                <p className="text-primary text-lg font-bold">{section.display_name.toUpperCase()}</p>
+                <p className="text-primary text-lg font-bold">{section?.display_text?.toUpperCase()}</p>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4"> {/* Make this a flex container with wrap */}
                   {section.items && 
-                    section.items.map((item: any, _) => {
+                    section.items.map((item: any, _: any) => {
                     return(
                       <Link
                         href={`/?productId=${item.item_id}`}>
                         <Card className="flex flex-row justify-between hover:border-primary hover:cursor-pointer" key={encodeURIComponent(item.item_id)}>
                           <div>
                             <CardHeader>
-                              <CardTitle>{item.display_name} {item.item_id}</CardTitle>
+                              <CardTitle>{item.display_text} {item.item_id}</CardTitle>
                               <CardDescription>{item.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
