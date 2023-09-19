@@ -4,6 +4,22 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export type ItemModifiers = {
+  combo_id: Generated<number>;
+  item_id: number;
+  modifier_id: number;
+  display_order: Generated<number>;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
+};
+export type ItemOptionPrices = {
+  combo_id: Generated<number>;
+  item_id: number;
+  option_id: number;
+  price: string;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
+};
 export type MenuItems = {
   item_id: Generated<number>;
   name: string;
@@ -15,6 +31,29 @@ export type MenuItems = {
   is_active: Generated<number>;
   is_available: Generated<number>;
   is_featured: Generated<number>;
+};
+export type ModifierOptions = {
+  option_id: Generated<number>;
+  modifier_id: number;
+  name: string;
+  displa_test: string;
+  display_order: Generated<number>;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
+  base_price: string;
+  selection_option_id: number | null;
+};
+export type Modifiers = {
+  modifier_id: Generated<number>;
+  name: Generated<string>;
+  display_test: Generated<string>;
+  description: string | null;
+  is_required: Generated<number>;
+  max_selection: number | null;
+  default_option_id: number | null;
+  display_order: Generated<number>;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
 };
 export type Section = {
   section_id: Generated<number>;
@@ -46,7 +85,11 @@ export type User = {
   last_login: Generated<Timestamp>;
 };
 export type DB = {
+  item_modifiers: ItemModifiers;
+  item_option_prices: ItemOptionPrices;
   menu_items: MenuItems;
+  modifier_options: ModifierOptions;
+  modifiers: Modifiers;
   section_items: SectionItems;
   sections: Section;
   users: User;

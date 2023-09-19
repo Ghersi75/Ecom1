@@ -82,6 +82,8 @@ model MenuItems {
   is_featured Boolean @default(false)
 
   section_items SectionItems[]
+  item_modifiers ItemModifiers[]
+  item_option_prices ItemOptionPrices[]
 
   @@map("menu_items")
 }
@@ -99,4 +101,82 @@ model SectionItems {
   item_id Int
 
   @@map("section_items")
+}
+
+// enum ModifierType {
+//   PIZZA
+//   SANDWICH
+// }
+
+// Modifier Section table
+// Ex: Topping, Size, Extra Sides, etc.
+model Modifiers {
+  modifier_id Int @id @default(autoincrement())
+  name String @db.VarChar(100) @default("modifier")
+  display_test String @db.VarChar(100) @default("Modifier Section")
+  description String? @db.VarChar(255)
+  is_required Boolean @default(false)
+  max_selection Int?
+  // Not sure about this one yet
+  // modifier_type ModifierType?
+  default_option_id Int? 
+  display_order Int @default(0)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  item_modifiers ItemModifiers[]
+  modifier_options ModifierOptions[]
+
+  @@map("modifiers")
+}
+
+// Table to link modifiers to items
+// Ex: Pizza has Size, Toppings, Extras Modifier Sections
+model ItemModifiers {
+  combo_id Int @id @default(autoincrement())
+  item_id Int
+  item MenuItems @relation(fields: [item_id], references: [item_id])
+  modifier_id Int
+  modifier Modifiers @relation(fields: [modifier_id], references: [modifier_id])
+  display_order Int @default(0)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  @@map("item_modifiers")
+}
+
+// Table for listing all options found in each modifier section
+// Ex: Modifier Size will have Small, Medium, Large as ModifierOptions
+model ModifierOptions {
+  option_id Int @id @default(autoincrement())
+  modifier_id Int
+  modifier Modifiers @relation(fields: [modifier_id], references: [modifier_id])
+  name String @db.VarChar(100)
+  displa_test String @db.VarChar(100)
+  display_order Int @default(0)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+  base_price Decimal @db.Decimal(10,2)
+  // Come back to this later
+  selection_option_id Int?
+
+  item_option_prices ItemOptionPrices[]
+
+  @@map("modifier_options")
+}
+
+// Table to model complex modifier option to menu item prices
+// Ex: Pizza Topping Pricing being dependant on Pizza Size for price
+model ItemOptionPrices {
+  combo_id Int @id @default(autoincrement())
+  item_id Int
+  item MenuItems @relation(fields: [item_id], references: [item_id])
+  option_id Int
+  modifier_option ModifierOptions @relation(fields: [option_id], references: [option_id])
+  price Decimal @db.Decimal(10,2)
+  // No display order here since this is only used for pricing an not sorting whatsoever
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  @@map("item_option_prices")
 }
