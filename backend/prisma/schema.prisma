@@ -49,7 +49,7 @@ model Section {
   // Also, restaurant may archive certain sections using the `is_active` field, so name may be useful for these purposes
   name String @db.VarChar(100)
   // Display name 
-  display_name String @db.VarChar(100)
+  display_text String @db.VarChar(100)
   // Key used to order the sections
   display_order Int @default(0)
   // If a new item is added, or accidentally added, and nothing is selected for active or available, it's better to not show it at first
@@ -64,7 +64,7 @@ model Section {
 model MenuItems {
   item_id Int @id @default(autoincrement())
   name String @db.VarChar(100)
-  display_name String @db.VarChar(100)
+  display_text String @db.VarChar(100)
   description String? @db.VarChar(500)
   image_link String? @db.VarChar(2048)
   // If base price is null, then price is dependent on size of item
@@ -113,7 +113,7 @@ enum ModifierType {
 model Modifiers {
   modifier_id Int @id @default(autoincrement())
   name String @db.VarChar(100) @default("modifier")
-  display_test String @db.VarChar(100) @default("Modifier Section")
+  display_text String @db.VarChar(100) @default("Modifier Section")
   description String? @db.VarChar(255)
   is_required Boolean @default(false)
   max_selection Int?
@@ -152,11 +152,11 @@ model ModifierOptions {
   modifier_id Int
   modifier Modifiers @relation(fields: [modifier_id], references: [modifier_id])
   name String @db.VarChar(100)
-  displa_test String @db.VarChar(100)
+  display_text String @db.VarChar(100)
   display_order Int @default(0)
   is_active Boolean @default(false)
   is_available Boolean @default(false)
-  base_price Decimal @db.Decimal(10,2)
+  base_price Decimal? @db.Decimal(10,2)
   // Come back to this later
   selection_option_id Int?
 
