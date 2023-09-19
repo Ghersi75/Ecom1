@@ -103,10 +103,10 @@ model SectionItems {
   @@map("section_items")
 }
 
-// enum ModifierType {
-//   PIZZA
-//   SANDWICH
-// }
+enum ModifierType {
+  RADIO
+  CHECKBOX
+}
 
 // Modifier Section table
 // Ex: Topping, Size, Extra Sides, etc.
@@ -117,8 +117,8 @@ model Modifiers {
   description String? @db.VarChar(255)
   is_required Boolean @default(false)
   max_selection Int?
-  // Not sure about this one yet
-  // modifier_type ModifierType?
+  // Radio or Checkbox
+  modifier_type ModifierType
   default_option_id Int? 
   display_order Int @default(0)
   is_active Boolean @default(false)

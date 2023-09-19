@@ -4,6 +4,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+import type { ModifierType } from './enums';
+
 export type ItemModifiers = {
   combo_id: Generated<number>;
   item_id: number;
@@ -50,6 +52,7 @@ export type Modifiers = {
   description: string | null;
   is_required: Generated<number>;
   max_selection: number | null;
+  modifier_type: ModifierType;
   default_option_id: number | null;
   display_order: Generated<number>;
   is_active: Generated<number>;
