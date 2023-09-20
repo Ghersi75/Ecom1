@@ -4,8 +4,15 @@ import { useState, useEffect, MouseEvent } from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card'
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { XOctagon } from "lucide-react"
-import { ViewItemMenuItemInterface } from "@/lib/types/databaseReturnTypes"
+import { Check, XOctagon } from "lucide-react"
+import { BaseModifierOptionsInterface, ViewItemMenuItemInterface, ViewItemModifierInterface } from "@/lib/types/databaseReturnTypes"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@radix-ui/react-label"
+import { ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
+import { ScrollArea } from "../ui/scroll-area"
+import ViewItemRadio from "./ViewItemRadio"
+import ViewItemCheckbox from "./ViewItemCheckbox"
 
 async function getSections(item_id: string) {
   const res = await fetch(`http://localhost:3333/menu/item/${item_id}`, {
@@ -30,6 +37,10 @@ export default function ViewItem({
 }) {
   const [loading, setLoading] = useState(true)
   const [itemData, setItemData] = useState<ViewItemMenuItemInterface | undefined>()
+  const [selected, setSelected] = useState<ViewItemsSelectedStateInterface>({ 
+    radios: { }, 
+    checkboxes: { }
+  })
   const router = useRouter()
 
   function handleBackgroundClick(e: MouseEvent<HTMLElement>) {
@@ -54,6 +65,31 @@ export default function ViewItem({
     )
   }, [])
 
+  function handleRadioChange(modifierName: string, optionName: string) {
+    setSelected(prev => ({
+      ...prev,
+      radios: {
+        ...prev.radios,
+        [modifierName]: optionName
+      }
+    }));
+  }
+
+  function handleCheckboxChange(modifierName: string, optionName: string) {
+    setSelected(prev => ({
+      ...prev,
+      checkboxes: {
+        ...prev.checkboxes,
+        [modifierName]: {
+          ...(prev.checkboxes[modifierName] || {}),
+          [optionName]: !(prev.checkboxes[modifierName]?.[optionName] || false)
+        }
+      }
+    }));
+  }
+  
+    
+
   return (
     <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-80" onClick={handleBackgroundClick}>
       {
@@ -63,10 +99,12 @@ export default function ViewItem({
         </Card> 
         :
         itemData ? 
-        <Card className="hover:border-primary w-[80%] h-[80%]">
-          <CardHeader>
-            <CardTitle>{itemData.display_text}</CardTitle>
-            <XOctagon className="hover:cursor-pointer" onClick={() => {router.push("/")}} />
+        <Card className="hover:border-primary flex flex-col w-[80%] h-[80%]">
+          <CardHeader className="flex-none bg-secondary rounded-t-lg">
+            <div className="flex flex-row justify-between items-center">
+              <CardTitle>{itemData.display_text}</CardTitle>
+              <XOctagon className="hover:cursor-pointer" size={36} onClick={() => {router.push("/")}} />
+            </div>
             {
               itemData.image_link ?
               <Image alt={`Image of ${itemData.display_text}`} src={itemData.image_link}/>
@@ -75,11 +113,62 @@ export default function ViewItem({
             }
             <CardDescription>{itemData.description}</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
+          <ScrollArea className="flex flex-grow">
+            <CardContent>
+              {
+                itemData.modifiers && itemData.modifiers.length > 0 && 
+                itemData.modifiers.map((modifier: ViewItemModifierInterface, index: number) => {
+                  return (
+                    <div key={index}>
+                    {
+                      modifier.modifier_options && modifier.modifier_options.length > 0 ? 
+                      <>
+                        <h1 className="p-2 text-lg">{modifier.display_text}</h1>
+                        {
+                          modifier.modifier_type === "RADIO" ? 
+                          <RadioGroup>
+                            {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
+                              return (
+                                <ViewItemRadio 
+                                  modifier={modifier.name}
+                                  option_name={modifier_option.name}
+                                  option_text={modifier_option.display_text}
+                                  handleRadioChange={handleRadioChange}
+                                  selected={selected}
+                                  />
+                              )
+                            })}
+                          </RadioGroup>
+                          : 
+                          modifier.modifier_type === "CHECKBOX" ?
+                          <div className="flex flex-col gap-2">
+                            {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
+                              return (
+                                <ViewItemCheckbox 
+                                  modifier={modifier.name}
+                                  option_name={modifier_option.name}
+                                  option_text={modifier_option.display_text}
+                                  handleCheckboxChange={handleCheckboxChange}
+                                  selected={selected}
+                                  />
+                              )
+                            })}
+                          </div>
+                          :
+                          null
+                        }
+                      </>
+                      : 
+                      null
+                    }
+                    </div>
+                  )
+                })
+              }
+            </CardContent>
+          </ScrollArea>
+          <CardFooter  className="flex-none bg-secondary rounded-b-lg p-4">
+            Card Footer
           </CardFooter>
         </Card>
         : 
