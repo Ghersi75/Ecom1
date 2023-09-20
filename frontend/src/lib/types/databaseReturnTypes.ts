@@ -47,7 +47,7 @@ interface BaseModifiersInterface {
   is_available: Generated<number>;
 }
 
-interface BaseModifierOptionsInterface {
+export interface BaseModifierOptionsInterface {
   option_id: Generated<number>;
   modifier_id: number;
   name: string;
@@ -59,7 +59,7 @@ interface BaseModifierOptionsInterface {
   selection_option_id: number | null;
 }
 
-interface ViewItemModifierInterface extends BaseModifiersInterface {
+export interface ViewItemModifierInterface extends BaseModifiersInterface {
   modifier_options: BaseModifierOptionsInterface[] | [] | undefined
 }
 
