@@ -159,10 +159,22 @@ model ModifierOptions {
   base_price Decimal? @db.Decimal(10,2)
   // Come back to this later
   selection_option_id Int?
+  selection_option SelectionOptions? @relation(fields: [selection_option_id], references: [selection_option_id])
 
   item_option_prices ItemOptionPrices[]
+  parent_option_prices OptionOptionPrices[] @relation(name: "ParentOptionRelation")
+  dependent_option_prices OptionOptionPrices[] @relation(name: "DependentOptionRelation")
 
   @@map("modifier_options")
+}
+
+model SelectionOptions {
+  selection_option_id Int @id @default(autoincrement())
+  option_name String @db.VarChar(100)
+
+  modifier_options ModifierOptions[]
+
+  @@map("selection_options")
 }
 
 // Table to model complex modifier option to menu item prices
@@ -179,4 +191,22 @@ model ItemOptionPrices {
   is_available Boolean @default(false)
 
   @@map("item_option_prices")
+}
+
+model OptionOptionPrices {
+  combo_id Int @id
+  // Option whose price depends on the dependents option
+  // Ex: Topping id would go here since pizza topping prices are dependent on size
+  parent_option_id Int
+  parent_modifier_id ModifierOptions @relation(name: "ParentOptionRelation", fields: [parent_option_id], references: [option_id])
+  // Option which determines the price
+  // Ex: Pizza size being selected would go here since it is the option which the price is dependent on
+  dependent_option_id Int
+  dependent_modifier_id ModifierOptions @relation(name: "DependentOptionRelation", fields: [dependent_option_id], references: [option_id])
+
+  price Decimal @db.Decimal(10,2)
+  is_active Boolean @default(false)
+  is_available Boolean @default(false)
+
+  @@map("option_option_prices")
 }
