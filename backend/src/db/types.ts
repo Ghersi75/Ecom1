@@ -58,6 +58,14 @@ export type Modifiers = {
   is_active: Generated<number>;
   is_available: Generated<number>;
 };
+export type OptionOptionPrices = {
+  combo_id: number;
+  parent_option_id: number;
+  dependent_option_id: number;
+  price: string;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
+};
 export type Section = {
   section_id: Generated<number>;
   name: string;
@@ -73,6 +81,10 @@ export type SectionItems = {
   is_available: Generated<number>;
   section_id: number;
   item_id: number;
+};
+export type SelectionOptions = {
+  selection_option_id: Generated<number>;
+  option_name: string;
 };
 export type User = {
   user_id: Generated<number>;
@@ -93,7 +105,9 @@ export type DB = {
   menu_items: MenuItems;
   modifier_options: ModifierOptions;
   modifiers: Modifiers;
+  option_option_prices: OptionOptionPrices;
   section_items: SectionItems;
   sections: Section;
+  selection_options: SelectionOptions;
   users: User;
 };
