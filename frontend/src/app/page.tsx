@@ -81,21 +81,22 @@ export default async function Home({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4"> {/* Make this a flex container with wrap */}
                   {section.items && 
                     section.items.map((item: any, _: any) => {
+                    console.log(item)
                     return(
                       <Link
                         href={`/?productId=${item.item_id}`}>
-                        <Card className="flex flex-row justify-between hover:border-primary hover:cursor-pointer" key={encodeURIComponent(item.item_id)}>
-                          <div>
+                        <Card className="flex flex-row justify-between hover:border-primary hover:cursor-pointer h-44" key={encodeURIComponent(item.item_id)}>
+                          <div className="flex flex-col justify-between">
                             <CardHeader>
-                              <CardTitle>{item.display_text} {item.item_id}</CardTitle>
+                              <CardTitle>{item.display_text}</CardTitle>
                               <CardDescription>{item.description}</CardDescription>
                             </CardHeader>
-                            <CardContent>
-                              <p>Card Content</p>
-                            </CardContent>
-                            <CardFooter>
-                              <p>Card Footer</p>
-                            </CardFooter>
+                            {
+                              item.base_price && 
+                              <CardFooter>
+                                <p>{`Price $${item.base_price}`}</p>
+                              </CardFooter>
+                            }
                           </div>
                           <Image className="rounded-r-lg" alt={`Image of ${item.display_name}`} src={`https://i0.wp.com/picjumbo.com/wp-content/uploads/yummy-and-tasty-salami-pizza-diavola-close-up-free-photo.jpg?w=600&quality=80`} width={200} height={200}/>
                         </Card>
