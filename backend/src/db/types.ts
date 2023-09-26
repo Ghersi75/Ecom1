@@ -59,7 +59,7 @@ export type Modifiers = {
   is_available: Generated<number>;
 };
 export type OptionOptionPrices = {
-  combo_id: number;
+  combo_id: Generated<number>;
   parent_option_id: number;
   dependent_option_id: number;
   price: string;

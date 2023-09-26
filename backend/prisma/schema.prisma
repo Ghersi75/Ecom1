@@ -194,7 +194,7 @@ model ItemOptionPrices {
 }
 
 model OptionOptionPrices {
-  combo_id Int @id
+  combo_id Int @id @default(autoincrement())
   // Option whose price depends on the dependents option
   // Ex: Topping id would go here since pizza topping prices are dependent on size
   parent_option_id Int
