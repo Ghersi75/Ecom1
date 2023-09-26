@@ -57,6 +57,10 @@ export interface BaseModifierOptionsInterface {
   is_available: Generated<number>;
   base_price: string | null;
   selection_option_id: number | null;
+  price: {
+    modifier_id: number,
+    [option_id: number]: string
+  } | null
 }
 
 export interface ViewItemModifierInterface extends BaseModifiersInterface {
