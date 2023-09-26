@@ -1,34 +1,41 @@
 
-import { ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
+import { ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
 import React from 'react'
 import { Label } from '../ui/label'
 import { RadioGroupItem } from '../ui/radio-group'
 
 export default function ViewItemRadio({ 
-  modifier,
+  modifier_id,
   option_name,
+  option_id,
   option_text,
-  handleRadioChange,
-  selected
+  handleChange,
+  selected,
+  price
  } : {
-  modifier: string;
+  modifier_id: number;
   option_name: string;
   option_text: string;
-  handleRadioChange: (modifier: string, option_name: string) => void;
-  selected: ViewItemsSelectedStateInterface
+  option_id: number;
+  handleChange: (modifier_id: number, option_id: number) => void;
+  selected: ViewItemsSelectedStateInterface;
+  price: string | null
  }) {
   return (
     <div className="flex items-center space-x-2" onClick={(e) => {
       e.currentTarget !== e.target &&
-      handleRadioChange(modifier, option_name)
+      handleChange(modifier_id, option_id)
     }}>
       <RadioGroupItem
             id={option_name} 
             value={option_text}
             // name={modifier.name}
-            checked={selected.radios[modifier] === option_name}
+            checked={(selected[modifier_id] as ViewItemsRadioSelectedStateInterface)?.selected_id === option_id}
       />
       <Label htmlFor={option_name} className="hover:cursor-pointer">{option_text}</Label>
+      <div>
+        {price}
+      </div>
     </div>
   )
 }

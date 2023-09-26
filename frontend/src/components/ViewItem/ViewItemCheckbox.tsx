@@ -1,29 +1,48 @@
-import { ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
+import { ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
 import React from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { Label } from '../ui/label'
 
 export default function ViewItemCheckbox({ 
-  modifier,
+  modifier_id,
   option_name,
+  option_id,
   option_text,
-  handleCheckboxChange,
-  selected
+  handleChange,
+  selected,
+  price
  } : {
-  modifier: string;
+  modifier_id: number;
   option_name: string;
+  option_id: number;
   option_text: string;
-  handleCheckboxChange: (modifier: string, option_name: string) => void;
-  selected: ViewItemsSelectedStateInterface
+  handleChange: (modifier_id: number, option_id: number) => void;
+  // Just pass relevant data in
+  selected: ViewItemsSelectedStateInterface;
+  price: {
+    modifier_id: number,
+    [option_id: number]: string
+  } | null
  }) {
+  console.log("Price: ", price)
+  console.log("Selected: ", selected)
+
   return (
     <div className="flex items-center justify-start gap-2" 
-        onClick={() => handleCheckboxChange(modifier, option_name)}>
+        onClick={() => handleChange(modifier_id, option_id)}>
       <Checkbox 
         id={option_name} 
-        checked={selected.checkboxes[modifier]?.[option_name]}
+        checked={(selected[modifier_id] as ViewItemsCheckboxSelectedStateInterface).selected_ids[option_id]}
       />
       <Label htmlFor={option_name} className="hover:cursor-pointer">{option_text}</Label>
+      {
+        price ? 
+        <div>
+          {`$${price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1]}`}
+        </div>
+        :
+        null
+      }
     </div>
   )
 }
