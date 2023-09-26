@@ -9,7 +9,7 @@ import { BaseModifierOptionsInterface, ViewItemMenuItemInterface, ViewItemModifi
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@radix-ui/react-label"
-import { ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
+import { ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
 import { ScrollArea } from "../ui/scroll-area"
 import ViewItemRadio from "./ViewItemRadio"
 import ViewItemCheckbox from "./ViewItemCheckbox"
@@ -37,9 +37,8 @@ export default function ViewItem({
 }) {
   const [loading, setLoading] = useState(true)
   const [itemData, setItemData] = useState<ViewItemMenuItemInterface | undefined>()
-  const [selected, setSelected] = useState<ViewItemsSelectedStateInterface>({ 
-    radios: { }, 
-    checkboxes: { }
+  const [selected, setSelected] = useState<ViewItemsSelectedStateInterface>({
+
   })
   const router = useRouter()
 
@@ -56,6 +55,35 @@ export default function ViewItem({
     .then(data => {
       console.log(data)
       setItemData(data)
+
+      // const firstRadio = itemOptionPrice.reduce((min, item) => {
+      //   return Math.min(min, parseFloat(item.price));
+      // }, Infinity);
+
+      // Initialize `selected` based on the fetched data
+      const initialSelected = data.modifiers.reduce((acc: any, modifier: any) => {
+        if (modifier.modifier_type === "RADIO") {
+          acc[modifier.modifier_id] = {
+            type: "RADIO",
+            selected_id: null,
+          };
+        } else if (modifier.modifier_type === "CHECKBOX") {
+          acc[modifier.modifier_id] = {
+            type: "CHECKBOX",
+            selected_ids: {},
+          };
+        }
+        return acc;
+      }, {});
+      
+      setSelected(initialSelected);
+
+      data.modifiers.forEach((modifier: any) => {
+        if (modifier.default_option_id) {
+          handleSelectedChange(modifier.modifier_id, modifier.default_option_id)
+        }
+      })
+
       setLoading(false)
     }).catch(e => 
       {
@@ -65,30 +93,43 @@ export default function ViewItem({
     )
   }, [])
 
-  function handleRadioChange(modifierName: string, optionName: string) {
-    setSelected(prev => ({
-      ...prev,
-      radios: {
-        ...prev.radios,
-        [modifierName]: optionName
-      }
-    }));
-  }
+  function handleSelectedChange(modifier_id: number, option_id: number) {
+    setSelected(prev => {
 
-  function handleCheckboxChange(modifierName: string, optionName: string) {
-    setSelected(prev => ({
-      ...prev,
-      checkboxes: {
-        ...prev.checkboxes,
-        [modifierName]: {
-          ...(prev.checkboxes[modifierName] || {}),
-          [optionName]: !(prev.checkboxes[modifierName]?.[optionName] || false)
-        }
+      const currentModifier = prev[modifier_id];
+
+      if (currentModifier.type === "RADIO") {
+        return {
+          ...prev,
+          [modifier_id]: {
+            ...currentModifier,
+            selected_id: option_id
+          }
+        };
+      } else if (currentModifier.type === "CHECKBOX") {
+        // Ensure currentModifier is treated as ViewItemsCheckboxSelectedStateInterface
+        const checkboxModifier = currentModifier as ViewItemsCheckboxSelectedStateInterface;
+
+        // Check for option_id, newOptionValue will be true if nothing's found, else false
+        const currentOptionValue = checkboxModifier.selected_ids[option_id];
+        const newOptionValue = !currentOptionValue;
+
+        return {
+          ...prev,
+          [modifier_id]: {
+            ...checkboxModifier,
+            selected_ids: {
+              ...checkboxModifier.selected_ids,
+              [option_id]: newOptionValue
+            }
+          }
+        };
       }
-    }));
-  }
-  
-    
+
+      return prev; // return the previous state if neither condition is met (just for safety)
+    });
+}
+
 
   return (
     <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-80" onClick={handleBackgroundClick}>
@@ -130,11 +171,13 @@ export default function ViewItem({
                             {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
                               return (
                                 <ViewItemRadio 
-                                  modifier={modifier.name}
+                                  modifier_id={modifier.modifier_id}
                                   option_name={modifier_option.name}
+                                  option_id={modifier_option.option_id}
                                   option_text={modifier_option.display_text}
-                                  handleRadioChange={handleRadioChange}
+                                  handleChange={handleSelectedChange}
                                   selected={selected}
+                                  price={modifier_option.base_price}
                                   />
                               )
                             })}
@@ -145,11 +188,13 @@ export default function ViewItem({
                             {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
                               return (
                                 <ViewItemCheckbox 
-                                  modifier={modifier.name}
+                                  modifier_id={modifier.modifier_id}
                                   option_name={modifier_option.name}
+                                  option_id={modifier_option.option_id}
                                   option_text={modifier_option.display_text}
-                                  handleCheckboxChange={handleCheckboxChange}
+                                  handleChange={handleSelectedChange}
                                   selected={selected}
+                                  price={modifier_option.price}
                                   />
                               )
                             })}
