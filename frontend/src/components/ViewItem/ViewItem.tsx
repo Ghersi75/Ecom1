@@ -1,18 +1,19 @@
 "use client"
 
-import { useState, useEffect, MouseEvent } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card'
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Check, XOctagon } from "lucide-react"
 import { BaseModifierOptionsInterface, ViewItemMenuItemInterface, ViewItemModifierInterface } from "@/lib/types/databaseReturnTypes"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@radix-ui/react-label"
 import { ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
 import { ScrollArea } from "../ui/scroll-area"
 import ViewItemRadio from "./ViewItemRadio"
 import ViewItemCheckbox from "./ViewItemCheckbox"
+import ViewItemParentContainer from "./ViewItemParentContainer"
+import ViewItemScrollArea from "./ViewItemScrollArea"
 
 async function getSections(item_id: string) {
   const res = await fetch(`http://localhost:3333/menu/item/${item_id}`, {
@@ -30,6 +31,11 @@ async function getSections(item_id: string) {
   return await res.json()
 }
 
+function getPrice(selected: ViewItemsSelectedStateInterface): number | null {
+  console.log("Selected: ", selected)
+  return null
+}
+
 export default function ViewItem({ 
   item_id
 } : {
@@ -40,20 +46,13 @@ export default function ViewItem({
   const [selected, setSelected] = useState<ViewItemsSelectedStateInterface>({
 
   })
+  const [price, setPrice] = useState<number | null>(getPrice(selected))
   const router = useRouter()
-
-  function handleBackgroundClick(e: MouseEvent<HTMLElement>) {
-    e.preventDefault()
-    // Check if its the parent only getting clicked, aka the background around the card
-    if (e.target === e.currentTarget) {
-      router.push("/")
-    }
-  }
 
   useEffect(() => {
     getSections(item_id)
     .then(data => {
-      console.log(data)
+      // console.log(data)
       setItemData(data)
 
       // const firstRadio = itemOptionPrice.reduce((min, item) => {
@@ -132,14 +131,14 @@ export default function ViewItem({
 
 
   return (
-    <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-80" onClick={handleBackgroundClick}>
+    <ViewItemParentContainer>
       {
         loading ?
         <Card className="w-[80%] h-[80%] flex justify-center items-center">
           <div className="animate-spin">Loading ... </div>
         </Card> 
         :
-        itemData ? 
+        itemData &&
         <Card className="hover:border-primary flex flex-col w-[80%] h-[80%]">
           <CardHeader className="flex-none bg-secondary rounded-t-lg">
             <div className="flex flex-row justify-between items-center">
@@ -147,78 +146,20 @@ export default function ViewItem({
               <XOctagon className="hover:cursor-pointer" size={36} onClick={() => {router.push("/")}} />
             </div>
             {
-              itemData.image_link ?
+              itemData.image_link &&
               <Image alt={`Image of ${itemData.display_text}`} src={itemData.image_link}/>
-              : 
-              null
             }
             <CardDescription>{itemData.description}</CardDescription>
           </CardHeader>
-          <ScrollArea className="flex flex-grow">
-            <CardContent>
-              {
-                itemData.modifiers && itemData.modifiers.length > 0 && 
-                itemData.modifiers.map((modifier: ViewItemModifierInterface, index: number) => {
-                  return (
-                    <div key={index}>
-                    {
-                      modifier.modifier_options && modifier.modifier_options.length > 0 ? 
-                      <>
-                        <h1 className="p-2 text-lg">{modifier.display_text}</h1>
-                        {
-                          modifier.modifier_type === "RADIO" ? 
-                          <RadioGroup>
-                            {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
-                              return (
-                                <ViewItemRadio 
-                                  modifier_id={modifier.modifier_id}
-                                  option_name={modifier_option.name}
-                                  option_id={modifier_option.option_id}
-                                  option_text={modifier_option.display_text}
-                                  handleChange={handleSelectedChange}
-                                  selected={selected}
-                                  price={modifier_option.base_price}
-                                  />
-                              )
-                            })}
-                          </RadioGroup>
-                          : 
-                          modifier.modifier_type === "CHECKBOX" ?
-                          <div className="flex flex-col gap-2">
-                            {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
-                              return (
-                                <ViewItemCheckbox 
-                                  modifier_id={modifier.modifier_id}
-                                  option_name={modifier_option.name}
-                                  option_id={modifier_option.option_id}
-                                  option_text={modifier_option.display_text}
-                                  handleChange={handleSelectedChange}
-                                  selected={selected}
-                                  price={modifier_option.price}
-                                  />
-                              )
-                            })}
-                          </div>
-                          :
-                          null
-                        }
-                      </>
-                      : 
-                      null
-                    }
-                    </div>
-                  )
-                })
-              }
-            </CardContent>
-          </ScrollArea>
+          <ViewItemScrollArea 
+            selected={selected}
+            handleSelectedChange={handleSelectedChange}
+            itemData={itemData}/>
           <CardFooter  className="flex-none bg-secondary rounded-b-lg p-4">
-            Card Footer
+            {price === null ? `Card Footer` : `$${price}`}
           </CardFooter>
         </Card>
-        : 
-        null
       }
-    </div>
+    </ViewItemParentContainer>
   )
 }
