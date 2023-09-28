@@ -10,7 +10,8 @@ interface BaseMenuItemsInterface {
   display_text: string;
   description: string | null;
   image_link: string | null;
-  base_price: string | null;
+  base_price: number | null;
+  display_price: number | null;
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
@@ -55,11 +56,11 @@ export interface BaseModifierOptionsInterface {
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
-  base_price: string | null;
+  base_price: number | null;
   selection_option_id: number | null;
   price: {
     modifier_id: number,
-    [option_id: number]: string
+    [option_id: number]: number
   } | null
 }
 

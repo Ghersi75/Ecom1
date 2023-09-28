@@ -23,7 +23,7 @@ export interface ViewItemsSelectedStateInterface {
   [modifierId: number]: (ViewItemsCheckboxSelectedStateInterface | ViewItemsRadioSelectedStateInterface)
 }
 
-export type ViewItemPriceType = string | {
+export type ViewItemPriceType = number | {
     modifier_id: number,
-    [modifier_option_id: number]: string
+    [modifier_option_id: number]: number
   } | null
