@@ -1,4 +1,5 @@
 import { ViewItemPriceType, ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
+import { formatCurrency } from '@/lib/utils'
 import React from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { Label } from '../ui/label'
@@ -21,7 +22,7 @@ export default function ViewItemCheckbox({
   selected: ViewItemsSelectedStateInterface;
   price: {
     modifier_id: number,
-    [option_id: number]: string
+    [option_id: number]: number
   } | null
  }) {
   // console.log("Price: ", price)
@@ -38,7 +39,7 @@ export default function ViewItemCheckbox({
       {
         price ? 
         <div>
-          {`$${price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1]}`}
+          {`${formatCurrency(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])}`}
         </div>
         :
         null

@@ -14,6 +14,7 @@ import ViewItemRadio from "./ViewItemRadio"
 import ViewItemCheckbox from "./ViewItemCheckbox"
 import ViewItemParentContainer from "./ViewItemParentContainer"
 import ViewItemScrollArea from "./ViewItemScrollArea"
+import { formatCurrency } from "@/lib/utils"
 
 async function getSections(item_id: string) {
   const res = await fetch(`http://localhost:3333/menu/item/${item_id}`, {
@@ -44,15 +45,15 @@ export default function ViewItem({
   const [price, setPrice] = useState<string | null>(null)
   const router = useRouter()
 
-  console.log("Price: ", price)
+  // console.log("Price: ", price)
 
 
   function updatePrice() {
-    console.log("Selected: ", selected)
+    // console.log("Selected: ", selected)
     let total = 0
 
     for (let [modifier_id, modifier] of Object.entries(selected)) {
-      console.log(modifier)
+      // console.log(modifier)
       if (modifier.type === "RADIO") { 
         if (modifier.price) {
           // Pricing is always of type string for RADIO since only 1 can be selected
@@ -69,7 +70,7 @@ export default function ViewItem({
               // [(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1]
               // console.log(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])
               total += parseFloat(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])
-              console.log(total)
+              // console.log(total)
             }
           }
         }
@@ -80,7 +81,7 @@ export default function ViewItem({
 
     // console.log(Object.keys(selected))
 
-    setPrice(total > 0 ? total.toFixed(2) : null)
+    setPrice(total > 0 ? formatCurrency(total) : null)
   }
 
   useEffect(() => {
@@ -206,7 +207,7 @@ export default function ViewItem({
             handleSelectedChange={handleSelectedChange}
             itemData={itemData}/>
           <CardFooter  className="flex-none bg-secondary rounded-b-lg p-4">
-            {price === null ? `Card Footer` : `$${price}`}
+            {price === null ? `Card Footer` : `${price}`}
           </CardFooter>
         </Card>
       }

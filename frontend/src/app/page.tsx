@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card"
 import ViewItem from "@/components/ViewItem/ViewItem";
 import { MenuSectionsType } from "@/lib/types/databaseReturnTypes";
+import { formatCurrency } from "@/lib/utils";
 
 import Image from "next/image"
 import Link from "next/link"
@@ -92,9 +93,9 @@ export default async function Home({
                               <CardDescription>{item.description}</CardDescription>
                             </CardHeader>
                             {
-                              item.base_price && 
+                              (item.base_price || item.display_price) && 
                               <CardFooter>
-                                <p>{`Price $${item.base_price}`}</p>
+                                <p>{`Price ${item.base_price ? formatCurrency(item.base_price) : formatCurrency(item.display_price)}`}</p>
                               </CardFooter>
                             }
                           </div>

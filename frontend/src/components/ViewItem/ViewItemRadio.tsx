@@ -1,5 +1,6 @@
 
 import { ViewItemPriceType, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
+import { formatCurrency } from '@/lib/utils'
 import React from 'react'
 import { Label } from '../ui/label'
 import { RadioGroupItem } from '../ui/radio-group'
@@ -19,9 +20,9 @@ export default function ViewItemRadio({
   option_id: number;
   handleChange: (modifier_id: number, option_id: number, price: ViewItemPriceType) => void;
   selected: ViewItemsSelectedStateInterface;
-  price: string | null
+  price: number | null
  }) {
-   console.log(price)
+  //  console.log(price)
   return (
     <div className="flex items-center space-x-2" onClick={(e) => {
       e.currentTarget !== e.target &&
@@ -34,9 +35,10 @@ export default function ViewItemRadio({
             checked={(selected[modifier_id] as ViewItemsRadioSelectedStateInterface)?.selected_id === option_id}
       />
       <Label htmlFor={option_name} className="hover:cursor-pointer">{option_text}</Label>
+      {price && 
       <div>
-        {price}
-      </div>
+        {formatCurrency(price)}
+      </div>}
     </div>
   )
 }
