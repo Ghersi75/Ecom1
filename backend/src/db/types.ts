@@ -18,7 +18,7 @@ export type ItemOptionPrices = {
   combo_id: Generated<number>;
   item_id: number;
   option_id: number;
-  price: string;
+  price: number;
   is_active: Generated<number>;
   is_available: Generated<number>;
 };
@@ -28,7 +28,8 @@ export type MenuItems = {
   display_text: string;
   description: string | null;
   image_link: string | null;
-  base_price: string | null;
+  base_price: number | null;
+  display_price: number | null;
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
@@ -42,7 +43,7 @@ export type ModifierOptions = {
   display_order: Generated<number>;
   is_active: Generated<number>;
   is_available: Generated<number>;
-  base_price: string | null;
+  base_price: number | null;
   selection_option_id: number | null;
 };
 export type Modifiers = {
@@ -62,7 +63,7 @@ export type OptionOptionPrices = {
   combo_id: Generated<number>;
   parent_option_id: number;
   dependent_option_id: number;
-  price: string;
+  price: number;
   is_active: Generated<number>;
   is_available: Generated<number>;
 };

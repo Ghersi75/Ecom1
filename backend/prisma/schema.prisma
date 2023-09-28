@@ -72,7 +72,9 @@ model MenuItems {
   // Sm Cheese = $10.99, Md Cheese = $13.99
   // Sm Special = $11.99, Md Special = $14.49
   // The prices don't have the same base price, and price doesn't increase consistently based on size, so it's better to have a separate table for pricing based on sizes
-  base_price Decimal? @db.Decimal(10, 2) 
+  base_price Int? @db.MediumInt
+  // Used to keep track of starting price for current item, and displayed in the landing page card
+  display_price Int? @db.MediumInt
   // This will not be used in the sections at the moment, but may be useful in the future, or for featured items section
   display_order Int @default(0)
   is_active Boolean @default(false)
@@ -156,7 +158,7 @@ model ModifierOptions {
   display_order Int @default(0)
   is_active Boolean @default(false)
   is_available Boolean @default(false)
-  base_price Decimal? @db.Decimal(10,2)
+  base_price Int? @db.MediumInt
   // Come back to this later
   selection_option_id Int?
   selection_option SelectionOptions? @relation(fields: [selection_option_id], references: [selection_option_id])
@@ -185,7 +187,7 @@ model ItemOptionPrices {
   item MenuItems @relation(fields: [item_id], references: [item_id])
   option_id Int
   modifier_option ModifierOptions @relation(fields: [option_id], references: [option_id])
-  price Decimal @db.Decimal(10,2)
+  price Int @db.MediumInt
   // No display order here since this is only used for pricing an not sorting whatsoever
   is_active Boolean @default(false)
   is_available Boolean @default(false)
@@ -204,7 +206,7 @@ model OptionOptionPrices {
   dependent_option_id Int
   dependent_modifier_id ModifierOptions @relation(name: "DependentOptionRelation", fields: [dependent_option_id], references: [option_id])
 
-  price Decimal @db.Decimal(10,2)
+  price Int @db.MediumInt
   is_active Boolean @default(false)
   is_available Boolean @default(false)
 
