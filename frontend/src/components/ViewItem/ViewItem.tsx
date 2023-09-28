@@ -8,7 +8,7 @@ import { Check, XOctagon } from "lucide-react"
 import { BaseModifierOptionsInterface, ViewItemMenuItemInterface, ViewItemModifierInterface } from "@/lib/types/databaseReturnTypes"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@radix-ui/react-label"
-import { ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
+import { ViewItemPriceType, ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from "@/lib/types/stateTypes"
 import { ScrollArea } from "../ui/scroll-area"
 import ViewItemRadio from "./ViewItemRadio"
 import ViewItemCheckbox from "./ViewItemCheckbox"
@@ -31,11 +31,6 @@ async function getSections(item_id: string) {
   return await res.json()
 }
 
-function getPrice(selected: ViewItemsSelectedStateInterface): number | null {
-  console.log("Selected: ", selected)
-  return null
-}
-
 export default function ViewItem({ 
   item_id
 } : {
@@ -46,8 +41,47 @@ export default function ViewItem({
   const [selected, setSelected] = useState<ViewItemsSelectedStateInterface>({
 
   })
-  const [price, setPrice] = useState<number | null>(getPrice(selected))
+  const [price, setPrice] = useState<string | null>(null)
   const router = useRouter()
+
+  console.log("Price: ", price)
+
+
+  function updatePrice() {
+    console.log("Selected: ", selected)
+    let total = 0
+
+    for (let [modifier_id, modifier] of Object.entries(selected)) {
+      console.log(modifier)
+      if (modifier.type === "RADIO") { 
+        if (modifier.price) {
+          // Pricing is always of type string for RADIO since only 1 can be selected
+          total += parseFloat(modifier.price)
+        }
+      } else if (modifier.type === "CHECKBOX") {
+        for (let [option_id, option_info] of Object.entries(modifier.selected_ids)) {
+          // console.log("option_id: ", option_id, "option_info: ", option_info)
+          if ((option_info as any).selected === true) {
+            const price = (option_info as any).price
+            if (typeof price === "string") {
+              total += parseFloat(price)
+            } else if (price !== null) {
+              // [(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1]
+              // console.log(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])
+              total += parseFloat(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])
+              console.log(total)
+            }
+          }
+        }
+        // console.log(Object.entries(modifier.selected_ids))
+
+      }
+    }
+
+    // console.log(Object.keys(selected))
+
+    setPrice(total > 0 ? total.toFixed(2) : null)
+  }
 
   useEffect(() => {
     getSections(item_id)
@@ -77,9 +111,16 @@ export default function ViewItem({
       
       setSelected(initialSelected);
 
+
       data.modifiers.forEach((modifier: any) => {
         if (modifier.default_option_id) {
-          handleSelectedChange(modifier.modifier_id, modifier.default_option_id)
+          let basePrice = null
+          modifier.modifier_options.forEach((option: any) => {
+            if (option.option_id === modifier.default_option_id) {
+              basePrice = option.base_price
+            }
+          })
+          handleSelectedChange(modifier.modifier_id, modifier.default_option_id, basePrice)
         }
       })
 
@@ -90,11 +131,16 @@ export default function ViewItem({
         router.push("/")
       }
     )
+
   }, [])
 
-  function handleSelectedChange(modifier_id: number, option_id: number) {
-    setSelected(prev => {
+  useEffect(() => {
+    updatePrice();
+}, [selected]);
 
+
+  function handleSelectedChange(modifier_id: number, option_id: number, price: ViewItemPriceType) {
+    setSelected(prev => {
       const currentModifier = prev[modifier_id];
 
       if (currentModifier.type === "RADIO") {
@@ -102,7 +148,8 @@ export default function ViewItem({
           ...prev,
           [modifier_id]: {
             ...currentModifier,
-            selected_id: option_id
+            selected_id: option_id,
+            price: price
           }
         };
       } else if (currentModifier.type === "CHECKBOX") {
@@ -110,7 +157,7 @@ export default function ViewItem({
         const checkboxModifier = currentModifier as ViewItemsCheckboxSelectedStateInterface;
 
         // Check for option_id, newOptionValue will be true if nothing's found, else false
-        const currentOptionValue = checkboxModifier.selected_ids[option_id];
+        const currentOptionValue = checkboxModifier.selected_ids[option_id]?.selected;
         const newOptionValue = !currentOptionValue;
 
         return {
@@ -119,7 +166,10 @@ export default function ViewItem({
             ...checkboxModifier,
             selected_ids: {
               ...checkboxModifier.selected_ids,
-              [option_id]: newOptionValue
+              [option_id]: {
+                selected: newOptionValue,
+                price: price
+              }
             }
           }
         };
