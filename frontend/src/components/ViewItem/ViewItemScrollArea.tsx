@@ -1,5 +1,5 @@
 import { ViewItemModifierInterface, BaseModifierOptionsInterface, ViewItemMenuItemInterface } from '@/lib/types/databaseReturnTypes'
-import { ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
+import { ViewItemPriceType, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
 import { RadioGroup } from "@/components/ui/radio-group"
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
@@ -13,7 +13,7 @@ export default function ViewItemScrollArea({
   selected
 } : {
   itemData: ViewItemMenuItemInterface;
-  handleSelectedChange: (modifier_id: number, option_id: number) => void;
+  handleSelectedChange: (modifier_id: number, option_id: number, price: ViewItemPriceType) => void;
   selected: ViewItemsSelectedStateInterface
 }) {
   return (
