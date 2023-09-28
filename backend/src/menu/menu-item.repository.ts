@@ -24,6 +24,7 @@ export class MenuItemRepository {
             "MI.description",
             "MI.image_link",
             "MI.base_price",
+            "MI.display_price",
             "MI.display_order",
             "MI.is_active",
             "MI.is_available",
