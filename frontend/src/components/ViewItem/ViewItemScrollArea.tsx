@@ -62,6 +62,7 @@ export default function ViewItemScrollArea({
                             handleChange={handleSelectedChange}
                             selected={selected}
                             price={modifier_option.price}
+                            max_selection={modifier.max_selection}
                             />
                         )
                       })}
