@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar/Navbar'
-import AuthProvider from '@/context/AuthProvider'
+import AuthProvider from '@/lib/context/AuthProvider'
 import Body from '@/components/ClientSideBody'
 
 
