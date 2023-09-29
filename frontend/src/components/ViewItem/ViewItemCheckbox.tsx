@@ -1,3 +1,4 @@
+import { BaseModifierOptionsInterface, ViewItemModifierInterface } from '@/lib/types/databaseReturnTypes'
 import { ViewItemPriceType, ViewItemsCheckboxSelectedStateInterface, ViewItemsRadioSelectedStateInterface, ViewItemsSelectedStateInterface } from '@/lib/types/stateTypes'
 import { formatCurrency } from '@/lib/utils'
 import React, { useState } from 'react'
@@ -5,27 +6,17 @@ import { Checkbox } from '../ui/checkbox'
 import { Label } from '../ui/label'
 
 export default function ViewItemCheckbox({ 
-  modifier_id,
-  option_name,
-  option_id,
-  option_text,
+  modifier,
+  modifier_option,
   handleChange,
   selected,
-  price,
-  max_selection
+  dependentPriceSelected
  } : {
-  modifier_id: number;
-  option_name: string;
-  option_id: number;
-  option_text: string;
+  modifier: ViewItemModifierInterface;
+  modifier_option: BaseModifierOptionsInterface;
   handleChange: (modifier_id: number, option_id: number, price: ViewItemPriceType) => void;
-  // Just pass relevant data in
-  selected: ViewItemsSelectedStateInterface;
-  price: {
-    modifier_id: number,
-    [option_id: number]: number
-  } | null;
-  max_selection: number | null;
+  selected: ViewItemsCheckboxSelectedStateInterface;
+  dependentPriceSelected: ViewItemsRadioSelectedStateInterface | ViewItemsCheckboxSelectedStateInterface | null;
  }) {
   const buttons = {
     buttons: [
@@ -41,12 +32,28 @@ export default function ViewItemCheckbox({
   }
 
   const [selectedBtn, setSelectedBtn] = useState<number | null>(buttons.default)
-  const checkboxSelected = (selected[modifier_id] as ViewItemsCheckboxSelectedStateInterface).selected_ids[option_id]?.selected
+  const {
+    modifier_id,
+    max_selection
+  } = modifier
+  const {
+    option_id,
+    name: option_name,
+    display_text: option_text,
+    price,
+
+  } = modifier_option
+  const checkboxSelected = selected?.selected_ids[option_id]?.selected
+  // const checkboxSelected = true
+  console.log(selected)
   let totalSelected = 0
 
-  for (let [option_id, option] of Object.entries((selected[modifier_id] as ViewItemsCheckboxSelectedStateInterface).selected_ids) ) {
-    if (option.selected === true) {
-      totalSelected += 1;
+  if (selected.selected_ids) {
+    for (let [option_id, option] of Object.entries(selected?.selected_ids) ) {
+      console.log(option_id)
+      // if (option.selected === true) {
+      //   totalSelected += 1;
+      // }
     }
   }
 
@@ -68,7 +75,13 @@ export default function ViewItemCheckbox({
         {
           price &&
           <div className={`${disabled && `cursor-not-allowed disabled`}`}>
-            {`${formatCurrency(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])}`}
+            {
+              dependentPriceSelected?.type === "RADIO" ? 
+              `${formatCurrency(price[dependentPriceSelected.selected_id || -1])}` : 
+              dependentPriceSelected?.type === "CHECKBOX" &&
+              `Haven't gotten here yet`
+            }
+            {/* {`${formatCurrency(price[(selected[price.modifier_id] as ViewItemsRadioSelectedStateInterface).selected_id || -1])}`} */}
           </div>
         }
       </div>
