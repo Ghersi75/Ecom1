@@ -12,11 +12,14 @@ export default function ViewItemRadio({
   handleChange,
   selected,
  } : {
-  modifier: ViewItemModifierInterface;
-  modifier_option: BaseModifierOptionsInterface;
-  handleChange: (modifier_id: number, option_id: number, price: ViewItemPriceType) => void;
+  modifier: ViewItemModifierInterface | undefined;
+  modifier_option: BaseModifierOptionsInterface | undefined;
+  handleChange: (modifier_id: number, option_id: number, display_text: string, price: ViewItemPriceType) => void;
   selected: ViewItemsRadioSelectedStateInterface;
  }) {
+  // console.log("ViewItemRadio -> modifier, modifier_option", modifier, modifier_option);
+
+  if (modifier && modifier_option) {
   const {
     modifier_id
   } = modifier
@@ -24,13 +27,13 @@ export default function ViewItemRadio({
     option_id,
     name: option_name,
     display_text: option_text,
-    price
+    base_price: price
   } = modifier_option
 
   return (
     <div className="flex items-center space-x-2" onClick={(e) => {
       e.currentTarget !== e.target &&
-      handleChange(modifier_id, option_id, price)
+      handleChange(modifier_id, option_id, option_text, price)
     }}>
       <RadioGroupItem
             id={option_name} 
@@ -45,4 +48,6 @@ export default function ViewItemRadio({
       </div>}
     </div>
   )
+  }
+  return null
 }
