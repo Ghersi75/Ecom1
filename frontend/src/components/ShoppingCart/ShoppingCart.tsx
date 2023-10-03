@@ -43,7 +43,8 @@ export default function ShoppingCart() {
   }, [cart])
 
   return (
-    <div className="h-[calc(100vh-var(--navbar-height))] sticky top-[var(--navbar-height)] bg-secondary min-w-[400px]">
+    // 
+    <div className="h-[calc(100vh-var(--navbar-height))] sticky top-[var(--navbar-height)] bg-secondary min-w-[400px] flex flex-col p-4">
       <h1 className={`p-4`}> Your Order </h1>
       {
         loading ? 
@@ -51,7 +52,7 @@ export default function ShoppingCart() {
           <Loader size={30} className="animate-spin" />
         </div>
         :
-        <ScrollArea className="h-40">
+        <ScrollArea className="flex grow">
           {
             cart.map((item, index) => {
               return (
