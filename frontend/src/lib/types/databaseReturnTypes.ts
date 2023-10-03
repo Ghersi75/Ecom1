@@ -58,7 +58,7 @@ export interface BaseModifierOptionsInterface {
   is_available: Generated<number>;
   base_price: number | null;
   selection_option_id: number | null;
-  price: {
+  price: number | {
     modifier_id: number,
     [option_id: number]: number
   } | null
