@@ -65,7 +65,7 @@ export default async function Home({
   console.log(sections)
 
   return (
-    <main className="mt-16">
+    <main className="">
       {
         productId ? 
         <ViewItem item_id={typeof productId === "string" ? productId : ""}/>
