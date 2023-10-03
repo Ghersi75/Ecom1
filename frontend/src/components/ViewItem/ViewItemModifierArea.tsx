@@ -13,68 +13,71 @@ export default function ViewItemModifierArea({
   selected
 } : {
   itemData: ViewItemMenuItemInterface;
-  handleSelectedChange: (modifier_id: number, option_id: number, price: ViewItemPriceType) => void;
+  handleSelectedChange: (modifier_id: number, option_id: number, display_text: string, price: ViewItemPriceType) => void;
   selected: ViewItemsSelectedStateInterface
 }) {
+  // console.log("ViewItemModifierArea -> itemData", itemData);
 
   return (
-    <ScrollArea className="flex flex-grow">
-      <CardContent>
-        {
-          itemData?.modifiers?.map((modifier: ViewItemModifierInterface, index: number) => {
-            const modifierOptionsExist = modifier.modifier_options && modifier.modifier_options.length > 0
-            return (
-              <div>
-                {
-                  modifierOptionsExist &&
-                  <>
-                    <h1 className="p-2 text-lg">{modifier.display_text}</h1>
-                    {
-                      modifier.modifier_type === "RADIO" ? 
-                      <div className="flex flex-col gap-2">
-                        <RadioGroup>
-                          {modifier?.modifier_options?.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
-                            // console.log("Radio: ", modifier_option)
+    <>
+      <ScrollArea className="flex flex-grow">
+        <CardContent>
+          {
+            itemData.modifiers && itemData.modifiers.length > 0 && 
+            itemData.modifiers.map((modifier: ViewItemModifierInterface, index: number) => {
+              return (
+                <div>
+                  {
+                    modifier.modifier_options && modifier.modifier_options.length > 0 &&
+                    <>
+                      <h1 className="p-2 text-lg">{modifier.display_text}</h1>
+                      {
+                        modifier.modifier_type === "RADIO" ? 
+                        <div className="flex flex-col gap-2">
+                          <RadioGroup>
+                            {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
+                              // console.log("Radio: ", modifier_option)
+                              return (
+                                <ViewItemRadio 
+                                  modifier={modifier}
+                                  modifier_option={modifier_option}
+                                  handleChange={handleSelectedChange}
+                                  selected={selected[modifier.modifier_id] as ViewItemsRadioSelectedStateInterface}
+                                  />
+                              )
+                            })}
+                          </RadioGroup>
+                        </div>
+                        : 
+                        modifier.modifier_type === "CHECKBOX" &&
+                        <div className="flex flex-col gap-2">
+                          {modifier.modifier_options.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
+                            let dependentPriceSelected: ViewItemsRadioSelectedStateInterface | ViewItemsCheckboxSelectedStateInterface | null = null
+                            if (modifier_option.price && typeof modifier_option.price !== "number") {
+                              const dependentPriceModifierId: number = modifier_option.price.modifier_id
+                              dependentPriceSelected = selected[dependentPriceModifierId]
+                            }
+
                             return (
-                              <ViewItemRadio 
+                              <ViewItemCheckbox 
                                 modifier={modifier}
                                 modifier_option={modifier_option}
                                 handleChange={handleSelectedChange}
-                                selected={selected[modifier.modifier_id] as ViewItemsRadioSelectedStateInterface}
+                                selected={selected[modifier.modifier_id] as ViewItemsCheckboxSelectedStateInterface}
+                                dependentPriceSelected={dependentPriceSelected}
                                 />
                             )
                           })}
-                        </RadioGroup>
-                      </div>
-                      : 
-                      modifier.modifier_type === "CHECKBOX" &&
-                      <div className="flex flex-col gap-2">
-                        {modifier?.modifier_options?.map((modifier_option: BaseModifierOptionsInterface, i: number) => {
-                          let dependentPriceSelected: ViewItemsRadioSelectedStateInterface | ViewItemsCheckboxSelectedStateInterface | null = null
-                          if (modifier_option.price && typeof modifier_option !== "number") {
-                            const dependentPriceModifierId: number = modifier_option.modifier_id
-                            dependentPriceSelected = selected[dependentPriceModifierId]
-                          }
-
-                          return (
-                            <ViewItemCheckbox 
-                              modifier={modifier}
-                              modifier_option={modifier_option}
-                              handleChange={handleSelectedChange}
-                              selected={selected[modifier.modifier_id] as ViewItemsCheckboxSelectedStateInterface}
-                              dependentPriceSelected={dependentPriceSelected}
-                              />
-                          )
-                        })}
-                      </div>
-                    }
-                  </>
-                }
-              </div>
-            )
-          })
-        }
-      </CardContent>
-    </ScrollArea>
+                        </div>
+                      }
+                    </>
+                  }
+                </div>
+              )
+            })
+          }
+        </CardContent>
+      </ScrollArea>
+    </>
   )
 }
