@@ -43,7 +43,7 @@ export default function ShoppingCart() {
   }, [cart])
 
   return (
-    <div className="h-[calc(100vh-var(--navbar-height))] bg-secondary min-w-[400px]">
+    <div className="h-[calc(100vh-var(--navbar-height))] sticky top-[var(--navbar-height)] bg-secondary min-w-[400px]">
       <h1 className={`p-4`}> Your Order </h1>
       {
         loading ? 
