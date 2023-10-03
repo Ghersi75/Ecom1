@@ -72,5 +72,14 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addBase, theme }) {
+      addBase({
+        ':root': {
+          '--navbar-height': theme('spacing.16'), // Here's where we extract the value from Tailwind's config
+        },
+      });
+    }
+  ],
 }
