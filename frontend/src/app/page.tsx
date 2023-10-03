@@ -76,7 +76,7 @@ export default async function Home({
       <div className="flex flex-row">
         {
           sections && sections?.length > 0 ? 
-          <div className="flex flex-col grow gap-4 p-8 lg:p-16">
+          <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
             {sections.map((section, index) => {
               return (
                 <div key={index}>
