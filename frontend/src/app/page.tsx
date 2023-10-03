@@ -73,7 +73,7 @@ export default async function Home({
         null
       }
 
-      <div className="flex flex-row">
+      <div className="flex h-[200vh] flex-row">
         {
           sections && sections?.length > 0 ? 
           <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
@@ -116,6 +116,9 @@ export default async function Home({
         }
         <ShoppingCart />
       </div>
+      <footer className="p-16 bg-slate-700 h-[200vh]">
+        Footer
+      </footer>
     </main>
 )
 
