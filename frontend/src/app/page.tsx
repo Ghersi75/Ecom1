@@ -73,11 +73,11 @@ export default async function Home({
         null
       }
 
-      <div className="flex h-[200vh] flex-row">
+      <div className="flex min-h-[calc(100vh - var(--navbar-height))] max-h-fit flex-row">
+        <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
         {
           sections && sections?.length > 0 ? 
-          <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
-            {sections.map((section, index) => {
+            sections.map((section, index) => {
               return (
                 <div key={index}>
                   <p className="text-primary text-lg font-bold">{section?.display_text?.toUpperCase()}</p>
@@ -109,11 +109,11 @@ export default async function Home({
                   </div>
                 </div>
               )
-            })}
+            })
+            : 
+            null
+          }
           </div> 
-          : 
-          null
-        }
         <ShoppingCart />
       </div>
       <footer className="p-16 bg-slate-700 h-[200vh]">
