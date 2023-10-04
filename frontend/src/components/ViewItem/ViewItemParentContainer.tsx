@@ -1,13 +1,15 @@
-import { MouseEvent, ReactNode } from "react"
+import { HTMLProps, MouseEvent, ReactNode } from "react"
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
-
+interface PropsInterface extends HTMLProps<HTMLDivElement> {
+  children: ReactNode
+}
 
 export default function ViewItemParentContainer({ 
+  className,
   children
-}: {
-  children: ReactNode
-}) {
+}: PropsInterface) {
   const router = useRouter()
 
   function handleBackgroundClick(e: MouseEvent<HTMLElement>) {
@@ -19,7 +21,7 @@ export default function ViewItemParentContainer({
   }
 
   return (
-    <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-80" onClick={handleBackgroundClick}>
+    <div className={cn(`h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-80`, className)} onClick={handleBackgroundClick}>
       {children}
     </div>
   )
