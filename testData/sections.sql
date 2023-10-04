@@ -1,6 +1,17 @@
 INSERT INTO sections (name, display_order, is_active, is_available, display_text) VALUES 
 ("deals", 0, 1, 1, "Deals and Coupons"), 
 ("popular", 1, 1, 1, "Popular Items"), 
-("pizzas", 2, 1, 1, "Pizzas"), 
-("grinders", 3, 1, 1, "Grinders"), 
-("appetizers", 4, 1, 1, "Appetizers");
+("specials", 2, 1, 1, "Specials"), 
+("pizzas", 3, 1, 1, "Pizzas"), 
+("pizza_by_the_slice", 4, 1, 1, "Pizza By The Slice"), 
+("appetizers", 5, 1, 1, "Appetizers"), 
+("soups", 6, 1, 1, "Soups"), 
+("salads", 7, 1, 1, "Salads"), 
+("sandwiches", 8, 1, 1, "Sandwiches"), 
+("grinders", 9, 1, 1, "Grinders"), 
+("grinders_grill", 10, 1, 1, "Grinders From The Grill"), 
+("wraps", 11, 1, 1, "Wraps"), 
+("calzones_strombolis", 12, 1, 1, "Calzones & Strombolis"), 
+("pasta_dinners", 13, 1, 1, "Pasta Dinners"), 
+("desserts", 14, 1, 1, "Desserts"), 
+("drinks", 15, 1, 1, "Drinks");
