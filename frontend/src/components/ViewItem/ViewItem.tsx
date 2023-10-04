@@ -248,7 +248,7 @@ export default function ViewItem({
   console.log(modifyCartSelectedIndex)
 
   return (
-    <ViewItemParentContainer>
+    <ViewItemParentContainer className="z-50">
       {
         loading ?
         <Card className="w-[80%] h-[80%] flex justify-center items-center">
@@ -264,7 +264,7 @@ export default function ViewItem({
             </div>
             {
               itemData.image_link &&
-              <Image alt={`Image of ${itemData.display_text}`} src={itemData.image_link}/>
+              <Image alt={`Image of ${itemData.display_text}`} src={itemData.image_link} width={200} height={200}/>
             }
             <CardDescription>{itemData.description}</CardDescription>
           </CardHeader>
