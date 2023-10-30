@@ -1,3 +1,0 @@
-INSERT INTO menu_items (name, description, image_link, base_price, display_order, is_active, is_available, display_text, display_price) VALUES 
-("pizza_specialty_buffalo", "Our homemade buffalo chicken pizza. White pizza topped with buffalo chicken, our special blend of mozzarella cheese, and blue cheese as a sauce substitute.", "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg", NULL, 0, 1, 1, "Buffalo Chicken Pizza", 1699), 
-("pizza_specialty_margherita", "Our homemade buffalo margherita pizza. White pizza topped with fresh tomatoes, fresh basil, and fresh garlic", "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg", NULL, 1, 1, 1, "Margherita Pizza", 1399);
