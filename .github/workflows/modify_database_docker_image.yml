@@ -3,7 +3,7 @@ name: Update docker starter database image
 on:
   push:
     paths:
-      - 'backend/starterData.sql'
+      - 'backend/db/starterData.sql'
 
 jobs:
   Echo-File-Changed:
