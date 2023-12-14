@@ -3,10 +3,11 @@ name: Update docker starter database image
 on:
   push:
     paths:
-    - /backend/starterData.sql
+      - 'backend/starterData.sql'
 
 jobs:
   Echo-File-Changed:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - run: echo "starterData.sql was changed"
