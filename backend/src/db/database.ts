@@ -5,11 +5,11 @@ import 'dotenv/config';
 
 const dialect = new MysqlDialect({
   pool: createPool({
-    database: 'pizzeria_test',
-    host: 'localhost',
+    database: process.env.DATABASE_NAME as string,
+    host: process.env.DATABASE_HOST as string,
     user: process.env.DATABASE_USER as string,
     password: process.env.DATABASE_PASSWORD as string,
-    port: 3306,
+    port: parseInt(process.env.DATABASE_PORT as string),
     connectionLimit: 10,
   })
 })
