@@ -13,7 +13,6 @@ import { formatCurrency } from "@/lib/utils";
 
 import Image from "next/image"
 import Link from "next/link"
-import { Suspense } from "react";
 
 async function getSections() {
   const res = await fetch("http://localhost:3333/menu/sections", {
@@ -29,19 +28,6 @@ async function getSections() {
   }
  
   return await res.json()
-}
-
-type Generated<T> = T
-
-async function Test(a: any) {
-  if (a) {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-  
-  }
-  
-  return (
-    <div> test </div>
-  )
 }
 
 export default async function Home({ 
