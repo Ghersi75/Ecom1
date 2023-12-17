@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - ./backend/db/initdb:/docker-entrypoint-initdb.d
+    ports:
+      ## host:docker -> Effictively, port 3307 locally is connected to 3306 on docker compose or whatever magic thing docker compose runs
+      - "3306:3306"
