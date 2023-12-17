@@ -9,4 +9,4 @@ services:
       - ./backend/db/initdb:/docker-entrypoint-initdb.d
     ports:
       ## host:docker -> Effictively, port 3307 locally is connected to 3306 on docker compose or whatever magic thing docker compose runs
-      - "3306:3306"
+      - "3307:3306"
