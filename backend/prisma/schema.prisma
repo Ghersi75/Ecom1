@@ -74,7 +74,7 @@ model MenuItems {
   // The prices don't have the same base price, and price doesn't increase consistently based on size, so it's better to have a separate table for pricing based on sizes
   BasePrice Int? @db.MediumInt
   // Used to keep track of starting price for current item, and displayed in the landing page card
-  display_price Int? @db.MediumInt
+  DisplayPrice Int? @db.MediumInt
   // This will not be used in the sections at the moment, but may be useful in the future, or for featured items section
   DisplayOrder Int @default(0)
   IsActive Boolean @default(false)
@@ -83,9 +83,9 @@ model MenuItems {
   // May be used for popular items or anything the restaurant may need
   IsFeatured Boolean @default(false)
 
-  section_items SectionItems[]
-  item_modifiers ItemModifiers[]
-  item_option_prices ItemOptionPrices[]
+  SectionItems SectionItems[]
+  ItemModifiers ItemModifiers[]
+  ItemOptionPrices ItemOptionPrices[]
 
   @@map("MenuItems")
 }

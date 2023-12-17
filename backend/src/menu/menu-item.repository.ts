@@ -7,41 +7,41 @@ export class MenuItemRepository {
 
     async getAllActiveSections() {
       const sections = await this.db.connection
-      .selectFrom("sections")
+      .selectFrom("Sections")
       .selectAll()
-      .orderBy("display_order asc")
-      .where("sections.is_active", "=", 1)
+      .orderBy("DisplayOrder asc")
+      .where("Sections.IsActive", "=", 1)
       .execute()
 
       const menu_items = await this.db.connection
-        .selectFrom("menu_items as MI")
-        .innerJoin("section_items as SI", "MI.item_id", "SI.item_id")
+        .selectFrom("MenuItems as MI")
+        .innerJoin("SectionItems as SI", "MI.ItemID", "SI.ItemID")
         .select([
-            "SI.section_id",
-            "MI.item_id",
-            "MI.name",
-            "MI.display_text",
-            "MI.description",
-            "MI.image_link",
-            "MI.base_price",
-            "MI.display_price",
-            "MI.display_order",
-            "MI.is_active",
-            "MI.is_available",
-            "MI.is_featured"
+          "SI.SectionID",
+          "MI.ItemID",
+          "MI.Name",
+          "MI.DisplayText",
+          "MI.Description",
+          "MI.ImageLink",
+          "MI.BasePrice",
+          "MI.DisplayPrice",
+          "MI.DisplayOrder",
+          "MI.IsActive",
+          "MI.IsAvailable",
+          "MI.IsFeatured"
         ])
         // Use SI or MI Here?
         // One of them will be redundant, or used in other ways I guess
-        .orderBy("SI.display_order asc")
-        .where("MI.is_active", "=", 1)
-        .where("SI.is_active", "=", 1)
+        .orderBy("SI.DisplayOrder asc")
+        .where("MI.IsActive", "=", 1)
+        .where("SI.IsActive", "=", 1)
         .execute();
 
       sections.forEach((section) => {
         section["items"] = []
         menu_items.forEach((item) => {
-          if (item.section_id == section.section_id) {
-            delete item.section_id
+          if (item.SectionID == section.SectionID) {
+            delete item.SectionID
             section["items"].push(item)
           } 
         })
@@ -52,10 +52,10 @@ export class MenuItemRepository {
 
     async getMenuItemById(id: number) {
       const menuItem = await this.db.connection
-        .selectFrom("menu_items")
+        .selectFrom("MenuItems")
         .selectAll()
-        .where("item_id", "=", id)
-        .where("is_active", "=", 1)
+        .where("ItemID", "=", id)
+        .where("IsActive", "=", 1)
         .executeTakeFirst()
   
       if (!menuItem) {
@@ -66,15 +66,15 @@ export class MenuItemRepository {
 
       const modifiers = await this.db.connection
         .selectFrom([
-          "item_modifiers as IM"
+          "ItemModifiers as IM"
         ])
-        .innerJoin("modifiers as M", "M.modifier_id", "IM.modifier_id")
-        .innerJoin("menu_items as MI", "MI.item_id", "IM.item_id")
+        .innerJoin("Modifiers as M", "M.ModifierID", "IM.ModifierID")
+        .innerJoin("MenuItems as MI", "MI.ItemID", "IM.ItemID")
         .selectAll("M")
-        .where("MI.item_id", "=", id)
-        .where("IM.is_active", "=", 1)
-        .where("M.is_active", "=", 1)
-        .orderBy("M.display_order asc")
+        .where("MI.ItemID", "=", id)
+        .where("IM.IsActive", "=", 1)
+        .where("M.IsActive", "=", 1)
+        .orderBy("M.DisplayOrder asc")
         .execute()
       
       if (!modifiers) {
@@ -85,13 +85,13 @@ export class MenuItemRepository {
 
       const modifierOptions = await this.db.connection
         .selectFrom([
-          "item_modifiers as IM"
+          "ItemModifiers as IM"
         ])
-        .innerJoin("modifiers as M", "M.modifier_id", "IM.modifier_id")
-        .innerJoin("menu_items as MI", "MI.item_id", "IM.item_id")
-        .innerJoin("modifier_options as MO", "MO.modifier_id", "M.modifier_id")
+        .innerJoin("Modifiers as M", "M.ModifierID", "IM.ModifierID")
+        .innerJoin("MenuItems as MI", "MI.ItemID", "IM.ItemID")
+        .innerJoin("ModifierOptions as MO", "MO.ModifierID", "M.ModifierID")
         .selectAll("MO")
-        .where("MI.item_id", "=", id)
+        .where("MI.ItemID", "=", id)
         .execute()
       
       if (!modifierOptions) {
@@ -106,48 +106,48 @@ export class MenuItemRepository {
 
       const itemOptionPrice = await this.db.connection
       .selectFrom([
-        "item_modifiers as IM"
+        "ItemModifiers as IM"
       ])
-      .innerJoin("modifiers as M", "M.modifier_id", "IM.modifier_id")
-      .innerJoin("menu_items as MI", "MI.item_id", "IM.item_id")
-      .innerJoin("modifier_options as MO", "MO.modifier_id", "M.modifier_id")
+      .innerJoin("Modifiers as M", "M.ModifierID", "IM.ModifierID")
+      .innerJoin("MenuItems as MI", "MI.ItemID", "IM.ItemID")
+      .innerJoin("ModifierOptions as MO", "MO.ModifierID", "M.ModifierID")
       .innerJoin(
-        "item_option_prices as IOP",
+        "ItemOptionPrices as IOP",
         (join) => join
-        .onRef('IOP.option_id', '=', 'MO.option_id')
-        .on('IOP.item_id', '=', id)  
+        .onRef('IOP.OptionID', '=', 'MO.OptionID')
+        .on('IOP.ItemID', '=', id)  
       )
       // "MO"
       .selectAll("IOP")
       // .select(({ fn }) => [
       //   fn.count<number>('MI.item_id').as('item_count'),
       // ])
-      .where("MI.item_id", "=", id)
+      .where("MI.ItemID", "=", id)
       .execute()
   
       // console.log(itemOptionPrice)
   
       const optionOptionPrices = await this.db.connection
       .selectFrom([
-        "item_modifiers as IM"
+        "ItemModifiers as IM"
       ])
-      .innerJoin("modifiers as M", "M.modifier_id", "IM.modifier_id")
-      .innerJoin("menu_items as MI", "MI.item_id", "IM.item_id")
-      .innerJoin("modifier_options as MO", "MO.modifier_id", "M.modifier_id")
-      .innerJoin("option_option_prices as OOP", "OOP.parent_option_id", "MO.option_id")
-      .innerJoin("modifier_options as MO2", "MO2.option_id", "OOP.dependent_option_id")
-      .innerJoin("modifiers as M2", "M2.modifier_id", "MO2.modifier_id")
+      .innerJoin("Modifiers as M", "M.ModifierID", "IM.ModifierID")
+      .innerJoin("MenuItems as MI", "MI.ItemID", "IM.ItemID")
+      .innerJoin("ModifierOptions as MO", "MO.ModifierID", "M.ModifierID")
+      .innerJoin("OptionOptionPrices as OOP", "OOP.ParentOptionID", "MO.OptionID")
+      .innerJoin("ModifierOptions as MO2", "MO2.OptionID", "OOP.DependentOptionID")
+      .innerJoin("Modifiers as M2", "M2.ModifierID", "MO2.ModifierID")
       .select([
-        "OOP.parent_option_id",
-        "OOP.dependent_option_id",
-        "M2.modifier_id",
-        "OOP.price"
+        "OOP.ParentOptionID",
+        "OOP.DependentOptionID",
+        "M2.ModifierID",
+        "OOP.Price"
       ])
       // .select(({ fn }) => [
       //   fn.count<number>('MI.item_id').as('item_count'),
       // ])
-      .where("MI.item_id", "=", id)
-      .where("OOP.is_active", "=", 1)
+      .where("MI.ItemID", "=", id)
+      .where("OOP.IsActive", "=", 1)
       // .where("OOP.is_available", "=", 1)
       .execute()
   
@@ -159,25 +159,25 @@ export class MenuItemRepository {
         // console.log(newObj, " || " ,currObj)
   
         const {
-          parent_option_id,
-          modifier_id,
-          dependent_option_id,
-          price,
+          ParentOptionID,
+          ModifierID,
+          DependentOptionID,
+          Price,
           ...rest
         } = currObj
   
-        if (!newObj[parent_option_id]) {
-          newObj[parent_option_id] = {};
+        if (!newObj[ParentOptionID]) {
+          newObj[ParentOptionID] = {};
         }
       
-        if (!newObj[parent_option_id][modifier_id]) {
-          newObj[parent_option_id][modifier_id] = {};
+        if (!newObj[ParentOptionID][ModifierID]) {
+          newObj[ParentOptionID][ModifierID] = {};
         }
   
-        newObj[currObj.parent_option_id] = {
-          ...newObj[currObj.parent_option_id],
-          modifier_id: modifier_id,
-          [dependent_option_id]: price
+        newObj[currObj.ParentOptionID] = {
+          ...newObj[currObj.ParentOptionID],
+          modifier_id: ModifierID,
+          [DependentOptionID]: Price
         }
         // console.log(newObj)
   
@@ -190,12 +190,12 @@ export class MenuItemRepository {
         modifier["modifier_options"] = []
         modifierOptions.forEach((option) => {
           itemOptionPrice.map((price) => {
-            if (price.option_id === option.option_id) {
+            if (price.OptionID === option.OptionID) {
               // const {
               //   combo_id,
               //   ...rest
               // } = price
-              option.base_price = price.price
+              option.BasePrice = price.Price
               // option["price"] = {
               //   ...option["price"],
               //   [combo_id]: rest
@@ -205,11 +205,11 @@ export class MenuItemRepository {
             }
           })
   
-          if (option.base_price === null && newOOP[option.option_id]) {
-            option["price"] = newOOP[option.option_id]
+          if (option.BasePrice === null && newOOP[option.OptionID]) {
+            option["price"] = newOOP[option.OptionID]
           }
   
-          if (option.modifier_id === modifier.modifier_id) {
+          if (option.ModifierID === modifier.ModifierID) {
             modifier["modifier_options"].push(option)
             // console.log(`Modifier: ${modifier.display_text}, Option: ${option.display_text}`)
           }

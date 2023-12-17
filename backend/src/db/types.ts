@@ -29,7 +29,7 @@ export type MenuItems = {
   Description: string | null;
   ImageLink: string | null;
   BasePrice: number | null;
-  display_price: number | null;
+  DisplayPrice: number | null;
   DisplayOrder: Generated<number>;
   IsActive: Generated<number>;
   IsAvailable: Generated<number>;
