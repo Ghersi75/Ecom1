@@ -4,16 +4,17 @@ USE PizzeriaTest;
 -- Main User Info
 CREATE TABLE Users (
   UserID INT NOT NULL AUTO_INCREMENT,
-  FirstName VARCHAR(50) NOT NULL,
-  LastName VARCHAR(50) NOT NULL,
+  Username VARCHAR(50) NOT NULL UNIQUE,
+  FirstName VARCHAR(50),
+  LastName VARCHAR(50),
   -- Optional PFP
   ProfilePicture VARCHAR(255),
-  Email VARCHAR(255) NOT NULL,
-  PhoneNumber VARCHAR(25) NOT NULL,
+  Email VARCHAR(255) NOT NULL UNIQUE,
+  PhoneNumber VARCHAR(25),
   -- Optional because OAuth doesnt have password
   PasswordHash VARCHAR(255),
   -- OAuth, Site Login, or Other
-  Provider VARCHAR(50),
+  Provider VARCHAR(50) NOT NULL,
   RegisterAt DATETIME,
   LastLogin DATETIME,
   PRIMARY KEY (UserID)
@@ -48,6 +49,7 @@ CREATE TABLE Modifiers (
   ModifierID INT NOT NULL AUTO_INCREMENT,
   Name VARCHAR(100) NOT NULL,
   DisplayText VARCHAR(100) NOT NULL,
+  Description VARCHAR(255),
   IsRequired BOOLEAN NOT NULL,
   MaxSelection INT,
   -- Double check this
@@ -56,7 +58,6 @@ CREATE TABLE Modifiers (
   DisplayOrder INT NOT NULL,
   IsActive BOOLEAN NOT NULL,
   IsAvailable BOOLEAN NOT NULL,
-  Description VARCHAR(255),
   PRIMARY KEY (ModifierID)
 );
 
@@ -74,6 +75,9 @@ CREATE TABLE MenuItems (
   ItemID INT NOT NULL AUTO_INCREMENT,
   Name VARCHAR(100) NOT NULL,
   BasePrice MEDIUMINT,
+  -- If there's no base price, and the current item has a small, medium, and large price, this will display the small price on the landing page
+  DisplayPrice MEDIUMINT,
+  DisplayText VARCHAR(100) NOT NULL,
   Description VARCHAR(500),
   ImageLink VARCHAR(2048),
   IsActive BOOLEAN NOT NULL,
@@ -106,6 +110,7 @@ CREATE TABLE ModifierOptions (
   ModifierID INT NOT NULL,
   Name VARCHAR(100) NOT NULL, 
   DisplayText VARCHAR(50) NOT NULL,
+  DisplayOrder INT NOT NULL,
   IsActive BOOLEAN NOT NULL,
   IsAvailable BOOLEAN NOT NULL,
   BasePrice MEDIUMINT,
