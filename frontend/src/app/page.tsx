@@ -13,41 +13,12 @@ import { formatCurrency } from "@/lib/utils";
 
 import Image from "next/image"
 import Link from "next/link"
+import { getSections } from "./helpers";
+import { SearchParamsType } from "./types";
 
-async function getSections() {
-  const res = await fetch("http://localhost:3333/menu/sections", {
-    method: "GET",
-  });
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
- 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    return null
-    // throw new Error('Failed to fetch data')
-  }
- 
-  return await res.json()
-}
-
-export default async function Home({ 
-  searchParams
-} : {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) {
+export default async function Home({ searchParams } : SearchParamsType) {
   const productId = searchParams.productId
-  let productInfo
-  
-  if (productId) {
-    productInfo = await fetch("http://localhost:3333/menu/sections", {
-      "method": "GET"
-    })
-  }
-
-  // console.log(productId)
-
-  const sections: MenuSectionsType[] | undefined = await getSections()
-
+  const [error, sections]= await getSections()
   console.log(sections)
 
   return (
@@ -63,12 +34,12 @@ export default async function Home({
         <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
         {
           sections && sections?.length > 0 ? 
-            sections.map((section, index) => {
+            sections.map((section: MenuSectionsType, index: number) => {
               return (
                 <div key={index}>
                   <p className="text-primary text-lg font-bold">{section?.DisplayName?.toUpperCase()}</p>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 pt-4"> {/* Make this a flex container with wrap */}
-                    {section.items && 
+                    {section?.items && 
                       section.items.map((item: any, _: any) => {
                       console.log(item)
                       return(
