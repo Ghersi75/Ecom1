@@ -15,20 +15,25 @@ import Image from "next/image"
 import Link from "next/link"
 import { getSections } from "./helpers";
 import { SearchParamsType } from "./types";
+import { Footer } from "./_components";
 
 export default async function Home({ searchParams } : SearchParamsType) {
   const productId = searchParams.productId
   const [error, sections]= await getSections()
-  console.log(sections)
+  // console.log(sections)
 
+  // TODO Fix this later
+  if (error) {
+    return (
+      <div>
+        Error lol
+      </div>
+    )
+  }
+  
   return (
     <main className="">
-      {
-        productId ? 
-        <ViewItem item_id={typeof productId === "string" ? productId : ""}/>
-        :
-        null
-      }
+      { productId ? <ViewItem item_id={typeof productId === "string" ? productId : ""}/> : null }
 
       <div className="flex min-h-[calc(100vh - var(--navbar-height))] max-h-fit flex-row">
         <div className="flex flex-col grow gap-4 p-8 2xl:p-16">
@@ -73,10 +78,7 @@ export default async function Home({ searchParams } : SearchParamsType) {
           </div> 
         <ShoppingCart />
       </div>
-      <footer className="p-16 bg-slate-700 h-[200vh]">
-        Footer
-      </footer>
+      <Footer />
     </main>
-)
-
+  )
 }
