@@ -83,7 +83,7 @@ CREATE TABLE MenuItems (
   IsActive BOOLEAN NOT NULL,
   IsAvailable BOOLEAN NOT NULL,
   DisplayOrder INT NOT NULL,
-  IsFeatured BOOLEAN NOT NULL,
+  IsFeatured BOOLEAN NOT NULL DEFAULT false,
   PRIMARY KEY (ItemID)
 );
 
@@ -177,7 +177,7 @@ CREATE TABLE OrderItemModifiers (
   FOREIGN KEY (SelectionOptionID) REFERENCES SelectionOptions (SelectionOptionID)
 );
 
-INSERT INTO Sections (name, DisplayOrder, IsActive, IsAvailable, DisplayName) VALUES 
+INSERT INTO Sections (Name, DisplayOrder, IsActive, IsAvailable, DisplayName) VALUES 
   ("deals", 0, 1, 1, "Deals and Coupons"), 
   ("popular", 1, 1, 1, "Popular Items"), 
   ("specials", 2, 1, 1, "Specials"), 
@@ -194,3 +194,11 @@ INSERT INTO Sections (name, DisplayOrder, IsActive, IsAvailable, DisplayName) VA
   ("pasta_dinners", 13, 1, 1, "Pasta Dinners"), 
   ("desserts", 14, 1, 1, "Desserts"), 
   ("drinks", 15, 1, 1, "Drinks");
+
+INSERT INTO MenuItems (Name, Description, ImageLink, BasePrice, DisplayOrder, IsActive, IsAvailable, DisplayText, DisplayPrice) VALUES 
+  ("pizza_specialty_buffalo", "Our homemade buffalo chicken pizza. White pizza topped with buffalo chicken, our special blend of mozzarella cheese, and blue cheese as a sauce substitute.", "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg", NULL, 0, 1, 1, "Buffalo Chicken Pizza", 1699), 
+  ("pizza_specialty_margherita", "Our homemade buffalo margherita pizza. White pizza topped with fresh tomatoes, fresh basil, and fresh garlic", "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg", NULL, 1, 1, 1, "Margherita Pizza", 1399);
+
+INSERT INTO SectionItems (DisplayOrder, IsActive, IsAvailable, SectionID, ItemID) VALUES 
+  (0, 1, 1, 2, 1), 
+  (1, 1, 1, 2, 2);
