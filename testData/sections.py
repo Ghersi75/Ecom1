@@ -1,28 +1,28 @@
 """
-+---------------+--------------+------+-----+---------+----------------+
-| Field         | Type         | Null | Key | Default | Extra          |
-+---------------+--------------+------+-----+---------+----------------+
-| section_id    | int          | NO   | PRI | NULL    | auto_increment |
-| name          | varchar(100) | NO   |     | NULL    |                |
-| display_order | int          | NO   |     | 0       |                |
-| is_active     | tinyint(1)   | NO   |     | 0       |                |
-| is_available  | tinyint(1)   | NO   |     | 0       |                |
-| display_text  | varchar(100) | NO   |     | NULL    |                |
-+---------------+--------------+------+-----+---------+----------------+
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| SectionID    | int          | NO   | PRI | NULL    | auto_increment |
+| Name         | varchar(100) | NO   |     | NULL    |                |
+| DisplayName  | varchar(100) | NO   |     | NULL    |                |
+| DisplayOrder | int          | NO   |     | NULL    |                |
+| IsActive     | tinyint(1)   | NO   |     | NULL    |                |
+| IsAvailable  | tinyint(1)   | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
 """
 
 def CreateSections(sections) -> str:
-  res = "INSERT INTO sections (name, display_order, is_active, is_available, display_text) VALUES \n"
+  res = "INSERT INTO Sections (Name, DisplayOrder, IsActive, IsAvailable, DisplayName) VALUES \n"
 
   for i in range(len(sections)):
     section = sections[i]
-    name = f"""\"{section["name"]}\"""" if "name" in section else "NULL"
-    display_order = section["display_order"] if "display_order" in section else i
-    is_active = section["is_active"] if "is_active" in section else 1
-    is_available = section["is_available"] if "is_available" in section else 1
-    display_text = f"""\"{section["display_text"]}\"""" if "display_text" in section else "NULL"
+    Name = f"""\"{section["Name"]}\"""" if "Name" in section else "NULL"
+    DisplayOrder = section["DisplayOrder"] if "DisplayOrder" in section else i
+    IsActive = section["IsActive"] if "IsActive" in section else 1
+    IsAvailable = section["IsAvailable"] if "IsAvailable" in section else 1
+    DisplayName = f"""\"{section["DisplayName"]}\"""" if "DisplayName" in section else "NULL"
 
-    res += f"({name}, {display_order}, {is_active}, {is_available}, {display_text})"
+    res += f"({Name}, {DisplayOrder}, {IsActive}, {IsAvailable}, {DisplayName})"
 
     if i == len(sections) - 1:
       res += ";"
@@ -33,72 +33,72 @@ def CreateSections(sections) -> str:
 
 sections = [
     {
-        "name": "deals",
-        "display_text": "Deals and Coupons"
+        "Name": "deals",
+        "DisplayName": "Deals and Coupons"
     },
     {
-        "name": "popular",
-        "display_text": "Popular Items"
+        "Name": "popular",
+        "DisplayName": "Popular Items"
     },
     {
-        "name": "specials",
-        "display_text": "Specials"
+        "Name": "specials",
+        "DisplayName": "Specials"
     },
     {
-        "name": "pizzas",
-        "display_text": "Pizzas"
+        "Name": "pizzas",
+        "DisplayName": "Pizzas"
     },
     {
-        "name": "pizza_by_the_slice",
-        "display_text": "Pizza By The Slice"
+        "Name": "pizza_by_the_slice",
+        "DisplayName": "Pizza By The Slice"
     },
     {
-        "name": "appetizers",
-        "display_text": "Appetizers"
+        "Name": "appetizers",
+        "DisplayName": "Appetizers"
     },
     {
-        "name": "soups",
-        "display_text": "Soups"
+        "Name": "soups",
+        "DisplayName": "Soups"
     },
     {
-        "name": "salads",
-        "display_text": "Salads"
+        "Name": "salads",
+        "DisplayName": "Salads"
     },
     {
-        "name": "sandwiches",
-        "display_text": "Sandwiches"
+        "Name": "sandwiches",
+        "DisplayName": "Sandwiches"
     },
     {
-        "name": "grinders",
-        "display_text": "Grinders"
+        "Name": "grinders",
+        "DisplayName": "Grinders"
     },
     {
-        "name": "grinders_grill",
-        "display_text": "Grinders From The Grill"
+        "Name": "grinders_grill",
+        "DisplayName": "Grinders From The Grill"
     },
     {
-        "name": "wraps",
-        "display_text": "Wraps"
+        "Name": "wraps",
+        "DisplayName": "Wraps"
     },
     {
-        "name": "calzones_strombolis",
-        "display_text": "Calzones & Strombolis"
+        "Name": "calzones_strombolis",
+        "DisplayName": "Calzones & Strombolis"
     },
     {
-        "name": "pasta_dinners",
-        "display_text": "Pasta Dinners"
+        "Name": "pasta_dinners",
+        "DisplayName": "Pasta Dinners"
     },
     {
-        "name": "desserts",
-        "display_text": "Desserts"
+        "Name": "desserts",
+        "DisplayName": "Desserts"
     },
     {
-        "name": "drinks",
-        "display_text": "Drinks"
+        "Name": "drinks",
+        "DisplayName": "Drinks"
     }
 ]
 
-print(len(sections))
+# print(len(sections))
 
 res = CreateSections(sections)
 

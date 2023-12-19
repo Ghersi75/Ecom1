@@ -1,28 +1,28 @@
 """
-+---------------+------------+------+-----+---------+----------------+
-| Field         | Type       | Null | Key | Default | Extra          |
-+---------------+------------+------+-----+---------+----------------+
-| combo_id      | int        | NO   | PRI | NULL    | auto_increment |
-| display_order | int        | NO   |     | 0       |                |
-| is_active     | tinyint(1) | NO   |     | 0       |                |
-| is_available  | tinyint(1) | NO   |     | 0       |                |
-| section_id    | int        | NO   | MUL | NULL    |                |
-| item_id       | int        | NO   | MUL | NULL    |                |
-+---------------+------------+------+-----+---------+----------------+
++--------------+------------+------+-----+---------+----------------+
+| Field        | Type       | Null | Key | Default | Extra          |
++--------------+------------+------+-----+---------+----------------+
+| ComboID      | int        | NO   | PRI | NULL    | auto_increment |
+| SectionID    | int        | NO   | MUL | NULL    |                |
+| ItemID       | int        | NO   | MUL | NULL    |                |
+| DisplayOrder | int        | NO   |     | NULL    |                |
+| IsActive     | tinyint(1) | NO   |     | NULL    |                |
+| IsAvailable  | tinyint(1) | NO   |     | NULL    |                |
++--------------+------------+------+-----+---------+----------------+
 """
 
 def insertIntoSection(section_id: int, sectionItems: list[dict[str, int]]) -> str:
-  res = "INSERT INTO section_items (display_order, is_active, is_available, section_id, item_id) VALUES \n"
+  res = "INSERT INTO SectionItems (DisplayOrder, IsActive, IsAvailable, SectionID, ItemID) VALUES \n"
 
   for i in range(len(sectionItems)):
     currItem = sectionItems[i]
 
-    display_order = currItem["display_order"] if "display_order" in currItem else i
-    is_active = currItem["is_active"] if "is_active" in currItem else 1
-    is_available = currItem["is_available"] if "is_available" in currItem else 1
-    item_id = currItem["item_id"] if "item_id" in currItem else Exception("Missing item_id")
+    DisplayOrder = currItem["DisplayOrder"] if "DisplayOrder" in currItem else i
+    IsActive = currItem["IsActive"] if "IsActive" in currItem else 1
+    IsAvailable = currItem["IsAvailable"] if "IsAvailable" in currItem else 1
+    ItemID = currItem["ItemID"] if "ItemID" in currItem else Exception("Missing item_id")
 
-    res += f"""({display_order}, {is_active}, {is_available}, {section_id}, {item_id})"""
+    res += f"""({DisplayOrder}, {IsActive}, {IsAvailable}, {section_id}, {ItemID})"""
 
     if i == len(sectionItems) - 1:
       res += ";"
@@ -33,30 +33,30 @@ def insertIntoSection(section_id: int, sectionItems: list[dict[str, int]]) -> st
 
 
 """
-SELECT item_id, name FROM menu_items;
-+---------+----------------------------+
-| item_id | name                       |
-+---------+----------------------------+
-|       2 | pizza_cheese               |
-|       3 | pizza_specialty_shkodra    |
-|       4 | pizza_specialty_buffalo    |
-|       5 | pizza_specialty_margherita |
-+---------+----------------------------+
+SELECT SectionID FROM Sections WHERE Name = "popular";
++-----------+
+| SectionID |
++-----------+
+|         2 |
++-----------+
 """
-popularSectionId = 4
+popularSectionId = 2
+"""
+SELECT ItemID, Name FROM MenuItems;
++--------+----------------------------+
+| ItemID | Name                       |
++--------+----------------------------+
+|      1 | pizza_specialty_buffalo    |
+|      2 | pizza_specialty_margherita |
++--------+----------------------------+
+"""
 popularSectionItems = [
   {
-    "item_id": 2,
+    "ItemID": 1,
   },
   {
-    "item_id": 3
-  },
-  {
-    "item_id": 4
-  },
-  {
-    "item_id": 5
-  },
+    "ItemID": 2
+  }
 ]
 
 res = insertIntoSection(popularSectionId, popularSectionItems)

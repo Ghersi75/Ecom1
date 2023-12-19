@@ -12,7 +12,7 @@
 | IsActive     | tinyint(1)    | NO   |     | NULL    |                |
 | IsAvailable  | tinyint(1)    | NO   |     | NULL    |                |
 | DisplayOrder | int           | NO   |     | NULL    |                |
-| IsFeatured   | tinyint(1)    | NO   |     | NULL    |                |
+| IsFeatured   | tinyint(1)    | NO   |     | 0       |                |
 +--------------+---------------+------+-----+---------+----------------+
 """
 
@@ -33,7 +33,7 @@ menuItems = [
   }
 ]
 
-res = "INSERT INTO menu_items (Name, Description, ImageLink, BasePrice, DisplayOrder, IsActive, IsAvailable, DisplayText, DisplayPrice) VALUES \n"
+res = "INSERT INTO MenuItems (Name, Description, ImageLink, BasePrice, DisplayOrder, IsActive, IsAvailable, DisplayText, DisplayPrice) VALUES \n"
 
 for i in range(len(menuItems)):
   currItem = menuItems[i]
