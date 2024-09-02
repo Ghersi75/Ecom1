@@ -5,27 +5,27 @@ type Generated<T> = T
 
 // Base MenuItems interface 
 interface BaseMenuItemsInterface {
-  ItemID: Generated<number>;
-  Name: string;
-  DisplayText: string;
-  Description: string | null;
-  ImageLink: string | null;
-  BasePrice: number | null;
-  DisplayPrice: number | null;
-  DisplayOrder: Generated<number>;
-  IsActive: Generated<number>;
-  IsAvailable: Generated<number>;
-  IsFeatured: Generated<number>;
+  item_id: Generated<number>;
+  name: string;
+  display_text: string;
+  description: string | null;
+  image_link: string | null;
+  base_price: number | null;
+  display_price: number | null;
+  display_order: Generated<number>;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
+  is_featured: Generated<number>;
 }
 
 // Base Sections interface 
 interface BaseSectionsInterface {
-  SectionID: Generated<number>;
-  Name: string;
-  DisplayName: string;
-  DisplayOrder: Generated<number>;
-  IsActive: Generated<number>;
-  IsAvailable: Generated<number>;
+  section_id: Generated<number>;
+  name: string;
+  display_text: string;
+  display_order: Generated<number>;
+  is_active: Generated<number>;
+  is_available: Generated<number>;
 }
 
 // Sections interface with items matching the section for item viewing page 

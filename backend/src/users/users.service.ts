@@ -19,7 +19,7 @@ export class UsersService {
     }
     
     if (dto.email) {
-      const user = await this.database.connection.selectFrom("Users").selectAll().where("Email", "=", dto.email).executeTakeFirst()
+      const user = await this.database.connection.selectFrom("users").selectAll().where("email", "=", dto.email).executeTakeFirst()
     
       // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
       if (!user) {
@@ -29,12 +29,12 @@ export class UsersService {
       }
 
       
-      if (compare(dto.password, user.PasswordHash)) {
+      if (compare(dto.password, user.password_hash)) {
         return JSON.stringify({
-          id: user.UserID,
-          username: user.Username,
-          email: user.Email,
-          image: user.ProfilePicture
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+          image: user.profile_picture
         })
       }
   
@@ -44,7 +44,7 @@ export class UsersService {
     }
 
     if (dto.username) {
-      const user = await this.database.connection.selectFrom("Users").selectAll().where("Username", "=", dto.username).executeTakeFirst()
+      const user = await this.database.connection.selectFrom("users").selectAll().where("username", "=", dto.username).executeTakeFirst()
     
       // If no user with current email is found, but user logged in with a provider, simply sign up with this email and any given info
       if (!user) {
@@ -53,12 +53,12 @@ export class UsersService {
         })
       }
 
-      if (compare(dto.password, user.PasswordHash)) {
+      if (compare(dto.password, user.password_hash)) {
         return JSON.stringify({
-          id: user.UserID,
-          username: user.Username,
-          email: user.Email,
-          image: user.ProfilePicture
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+          image: user.profile_picture
         })
       }
   
@@ -83,11 +83,11 @@ export class UsersService {
 
     const hashedPass = await hash(dto.password, 12)
     try {
-      const user = await this.database.connection.insertInto("Users").values({
-        Username: dto.username,
-        Email: dto.email,
-        PasswordHash: hashedPass,
-        Provider: dto.provider
+      const user = await this.database.connection.insertInto("users").values({
+        username: dto.username,
+        email: dto.email,
+        password_hash: hashedPass,
+        provider: dto.provider
       }).executeTakeFirst()
 
       console.log(user)
