@@ -1,4 +1,4 @@
-INSERT INTO Sections (Name, DisplayOrder, IsActive, IsAvailable, DisplayName) VALUES 
+INSERT INTO sections (name, display_order, is_active, is_available, display_text) VALUES 
 ("deals", 0, 1, 1, "Deals and Coupons"), 
 ("popular", 1, 1, 1, "Popular Items"), 
 ("specials", 2, 1, 1, "Specials"), 

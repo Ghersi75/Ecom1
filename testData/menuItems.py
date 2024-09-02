@@ -1,54 +1,54 @@
 """
-+--------------+---------------+------+-----+---------+----------------+
-| Field        | Type          | Null | Key | Default | Extra          |
-+--------------+---------------+------+-----+---------+----------------+
-| ItemID       | int           | NO   | PRI | NULL    | auto_increment |
-| Name         | varchar(100)  | NO   |     | NULL    |                |
-| BasePrice    | mediumint     | YES  |     | NULL    |                |
-| DisplayPrice | mediumint     | YES  |     | NULL    |                |
-| DisplayText  | varchar(100)  | NO   |     | NULL    |                |
-| Description  | varchar(500)  | YES  |     | NULL    |                |
-| ImageLink    | varchar(2048) | YES  |     | NULL    |                |
-| IsActive     | tinyint(1)    | NO   |     | NULL    |                |
-| IsAvailable  | tinyint(1)    | NO   |     | NULL    |                |
-| DisplayOrder | int           | NO   |     | NULL    |                |
-| IsFeatured   | tinyint(1)    | NO   |     | 0       |                |
-+--------------+---------------+------+-----+---------+----------------+
++---------------+---------------+------+-----+---------+----------------+
+| Field         | Type          | Null | Key | Default | Extra          |
++---------------+---------------+------+-----+---------+----------------+
+| item_id       | int           | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(100)  | NO   |     | NULL    |                |
+| description   | varchar(500)  | YES  |     | NULL    |                |
+| image_link    | varchar(2048) | YES  |     | NULL    |                |
+| base_price    | mediumint     | YES  |     | NULL    |                |
+| display_order | int           | NO   |     | 0       |                |
+| is_active     | tinyint(1)    | NO   |     | 0       |                |
+| is_available  | tinyint(1)    | NO   |     | 0       |                |
+| is_featured   | tinyint(1)    | NO   |     | 0       |                |
+| display_text  | varchar(100)  | NO   |     | NULL    |                |
+| display_price | mediumint     | YES  |     | NULL    |                |
++---------------+---------------+------+-----+---------+----------------+
 """
 
 menuItems = [
   {
-    "Name": "pizza_specialty_buffalo",
-    "Description": "Our homemade buffalo chicken pizza. White pizza topped with buffalo chicken, our special blend of mozzarella cheese, and blue cheese as a sauce substitute.",
-    "ImageLink": "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg",
-    "DisplayText": "Buffalo Chicken Pizza",
-    "DisplayPrice": 1699
+    "name": "pizza_specialty_buffalo",
+    "description": "Our homemade buffalo chicken pizza. White pizza topped with buffalo chicken, our special blend of mozzarella cheese, and blue cheese as a sauce substitute.",
+    "image_link": "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg",
+    "display_text": "Buffalo Chicken Pizza",
+    "display_price": 1699
   },
   {
-    "Name": "pizza_specialty_margherita",
-    "Description": "Our homemade buffalo margherita pizza. White pizza topped with fresh tomatoes, fresh basil, and fresh garlic",
-    "ImageLink": "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg",
-    "DisplayText": "Margherita Pizza",
-    "DisplayPrice": 1399
+    "name": "pizza_specialty_margherita",
+    "description": "Our homemade buffalo margherita pizza. White pizza topped with fresh tomatoes, fresh basil, and fresh garlic",
+    "image_link": "https://img.freepik.com/premium-photo/aesthetic-dripping-tasty-pizza-slice-generative-ai_863013-1954.jpg",
+    "display_text": "Margherita Pizza",
+    "display_price": 1399
   }
 ]
 
-res = "INSERT INTO MenuItems (Name, Description, ImageLink, BasePrice, DisplayOrder, IsActive, IsAvailable, DisplayText, DisplayPrice) VALUES \n"
+res = "INSERT INTO menu_items (name, description, image_link, base_price, display_order, is_active, is_available, display_text, display_price) VALUES \n"
 
 for i in range(len(menuItems)):
   currItem = menuItems[i]
 
-  Name = f"""\"{currItem["Name"]}\"""" if "Name" in currItem else ""
-  Description = f"""\"{currItem["Description"]}\""""if "Description" in currItem else "NULL"
-  ImageLink = f"""\"{currItem["ImageLink"]}\"""" if "ImageLink" in currItem else "NULL"
-  BasePrice = currItem["BasePrice"] if "BasePrice" in currItem else "NULL"
+  name = f"""\"{currItem["name"]}\"""" if "name" in currItem else ""
+  description = f"""\"{currItem["description"]}\""""if "description" in currItem else "NULL"
+  image_link = f"""\"{currItem["image_link"]}\"""" if "image_link" in currItem else "NULL"
+  base_price = currItem["base_price"] if "base_price" in currItem else "NULL"
   # This wont be perfect, but works as default if lazy
-  DisplayOrder = currItem["DisplayOrder"] if "DisplayOrder" in currItem else i
-  IsActive = currItem["IsActive"] if "IsActive" in currItem else 1
-  IsAvailable = currItem["IsAvailable"] if "IsAvailable" in currItem else 1
-  DisplayText = f"""\"{currItem["DisplayText"]}\"""" if "DisplayText" in currItem else "NULL"
-  DisplayPrice = currItem["DisplayPrice"] if "DisplayPrice" in currItem else "NULL"
-  res += f"""({Name}, {Description}, {ImageLink}, {BasePrice}, {DisplayOrder}, {IsActive}, {IsAvailable}, {DisplayText}, {DisplayPrice})"""
+  display_order = currItem["display_order"] if "display_order" in currItem else i
+  is_active = currItem["is_active"] if "is_active" in currItem else 1
+  is_available = currItem["is_available"] if "is_available" in currItem else 1
+  display_text = f"""\"{currItem["display_text"]}\"""" if "display_text" in currItem else "NULL"
+  display_price = currItem["display_price"] if "display_price" in currItem else "NULL"
+  res += f"""({name}, {description}, {image_link}, {base_price}, {display_order}, {is_active}, {is_available}, {display_text}, {display_price})"""
 
   if i == len(menuItems) - 1:
     res += ";"
