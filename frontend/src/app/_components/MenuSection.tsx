@@ -3,10 +3,10 @@ import { MenuItem } from "./MenuItem";
 
 // MenuSection will be each individual section, such as Pizza
 export function MenuSection({ section, index }: MenuSectionPropsType ) {
-  // console.log(section)
+ 
   return(
     <div key={index}>
-      <p className="text-primary text-lg font-bold">{section?.DisplayName?.toUpperCase()}</p>
+      <p className="text-primary text-lg font-bold">{section?.display_text?.toUpperCase()}</p>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 pt-4"> {/* Make this a flex container with wrap */}
         <>
         {section?.items && 
