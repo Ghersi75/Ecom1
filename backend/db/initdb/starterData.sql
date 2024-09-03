@@ -63,7 +63,7 @@ CREATE TABLE modifiers (
 CREATE TABLE sections (
   section_id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
-  display_name VARCHAR(100) NOT NULL,
+  display_text VARCHAR(100) NOT NULL,
   display_order INT NOT NULL,
   is_active BOOLEAN NOT NULL,
   is_available BOOLEAN NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE order_item_modifiers (
   FOREIGN KEY (selection_option_id) REFERENCES selection_options (selection_option_id)
 );
 
-INSERT INTO sections (name, display_order, is_active, is_available, display_name) VALUES 
+INSERT INTO sections (name, display_order, is_active, is_available, display_text) VALUES 
   ("deals", 0, 1, 1, "Deals and Coupons"), 
   ("popular", 1, 1, 1, "Popular Items"), 
   ("specials", 2, 1, 1, "Specials"), 
