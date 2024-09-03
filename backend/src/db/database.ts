@@ -1,4 +1,4 @@
-import { DB } from './types' // this is the Database interface we defined earlier
+import { DB } from '../types/db' // this is the Database interface we defined earlier
 import { createPool } from 'mysql2' // do not use 'mysql2/promises'!
 import { Kysely, MysqlDialect } from 'kysely'
 import 'dotenv/config';
