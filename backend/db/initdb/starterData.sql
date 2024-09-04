@@ -131,8 +131,8 @@ CREATE TABLE option_option_prices (
 
 CREATE TABLE item_modifiers (
   combo_id INT NOT NULL AUTO_INCREMENT,
-  item_id INT NULL,
-  modifier_id INT NULL,
+  item_id INT NOT NULL,
+  modifier_id INT NOT NULL,
   display_order INT NOT NULL, 
   is_active BOOLEAN NOT NULL,
   is_available BOOLEAN NOT NULL,
